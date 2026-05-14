@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Disallow: /api/
+Disallow: /dashboard
+
+Sitemap: https://taskroom.in/sitemap.xml
