@@ -2589,8 +2589,8 @@ select option{background:var(--surface);color:var(--text)}
    TASKROOM — COMPLETE DASHBOARD JAVASCRIPT
    ══════════════════════════════════════════════════════════════════════ */
 
-const BASE = 'https://taskroom-backend.onrender.com/api';
-<!-- const BASE = 'http://localhost:3000/api'; -->
+<!-- const BASE = 'https://taskroom-backend.onrender.com/api'; -->
+const BASE = 'http://localhost:3000/api';
 let _user=null,_token=null,_org=null;
 let _pg=1,_rpg=1,_tpg=1,_apg=1,_mpg=1;
 let _taskFilter='',_currentTaskId=null,_currentRoomId=null;
@@ -3963,6 +3963,19 @@ async function submitLogin(e){
   try{
     const d=await api('POST','/auth/login',{username:user,password:pass,organizationCode:code},null);
     if(d.success){
+      if(d.data?.user?.role === 'employee') {
+        showA(
+          'alert-login', 'amber',
+          `
+          <strong>Manager Access Only</strong>
+          This dashboard is available only for managers and administrators.
+          <br><br>
+          Employees should use the TaskRoom mobile application for tasks,
+          attendance, and updates.
+          `
+        );
+        return;
+      }
       _user=d.data.user;_token=d.data.token;
       const oid=_user.organization?._id||_user.organization;
       const od=await api('GET','/organization/detail/'+oid);
