@@ -4134,16 +4134,67 @@ async function submitLogin(e){
     const d=await api('POST','/auth/login',{username:user,password:pass,organizationCode:code},null);
     if(d.success){
       if(d.data?.user?.role === 'employee') {
-        showA(
-          'alert-login', 'amber',
-          `
-          <strong>Manager Access Only</strong>
-          This dashboard is available only for managers and administrators.
-          <br><br>
-          Employees should use the TaskRoom mobile application for tasks,
-          attendance, and updates.
-          `
-        );
+        const empName = d.data?.user?.fullName || d.data?.user?.username || 'there';
+        $('alert-login').innerHTML = `
+          <div style="
+            background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(245,158,11,.04));
+            border:1px solid rgba(245,158,11,.3);
+            border-radius:12px;
+            padding:20px;
+            text-align:center;
+          ">
+            <div style="font-size:36px;margin-bottom:10px">📱</div>
+
+            <div style="font-size:15px;font-weight:800;color:var(--amber);margin-bottom:6px;letter-spacing:-.3px">
+              Hey ${esc(empName)}, use the mobile app!
+            </div>
+
+            <div style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px">
+              This dashboard is for <strong style="color:var(--text)">managers only</strong>.<br>
+              Employees access tasks, attendance, and updates<br>through the <strong style="color:var(--text)">TaskRoom mobile app</strong>.
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:8px">
+
+              <a href="/download/TaskRoom_v1.apk" download style="
+                display:flex;align-items:center;justify-content:center;gap:8px;
+                background:rgba(61,220,132,.12);border:1px solid rgba(61,220,132,.3);
+                color:#3ddc84;padding:10px 16px;border-radius:8px;
+                font-size:13px;font-weight:700;text-decoration:none;
+                transition:all .2s;
+              " onmouseover="this.style.background='rgba(61,220,132,.2)'" 
+                onmouseout="this.style.background='rgba(61,220,132,.12)'">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M3.18 23.76a2 2 0 0 0 2.73.75l10.49-6.07-2.9-2.9-10.32 8.22zm17.29-13.53L17.03 8l-3.06 3.06 3.06 3.06 3.5-2.01a1.5 1.5 0 0 0-.06-2.88zM2.12.46A1.5 1.5 0 0 0 2 1.12V22.9a1.5 1.5 0 0 0 .12.65l.07.07L13.5 12 2.19.39l-.07.07zM15.97 5.03l-10.06-5.8A2 2 0 0 0 3.18.22L13.5 12l2.47-6.97z"/>
+                </svg>
+                Download for Android
+              </a>
+
+              <div style="
+                display:flex;align-items:center;justify-content:center;gap:8px;
+                background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+                color:var(--text3);padding:10px 16px;border-radius:8px;
+                font-size:13px;font-weight:600;
+              ">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.4c1.39.07 2.36.75 3.17.8 1.22-.25 2.39-.96 3.7-.84 1.57.12 2.75.72 3.52 1.82-3.26 1.95-2.73 6.03.61 7.2-.44 1.2-.99 2.38-2 3.9M13 3.5c.04 2.4-2.2 4.4-4.47 4.2C8.2 5.32 10.5 3 13 3.5"/>
+                </svg>
+                iOS — Coming Soon
+              </div>
+
+            </div>
+
+            <div style="
+              margin-top:14px;padding-top:14px;
+              border-top:1px solid rgba(245,158,11,.15);
+              font-size:12px;color:var(--text3);
+            ">
+              Are you a manager? Make sure you're using the correct account.
+            </div>
+          </div>
+        `;
+        // Clear the form password for security
+        $('in-lpass').value = '';
         return;
       }
       _user=d.data.user;_token=d.data.token;
