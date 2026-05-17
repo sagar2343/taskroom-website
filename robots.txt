@@ -1,7 +1,11 @@
 User-agent: *
 Allow: /
 
-Disallow: /api/
-Disallow: /dashboard
+User-agent: Googlebot
+Allow: /
 
 Sitemap: https://taskroom.in/sitemap.xml
+
+# Block dashboard and API routes from indexing
+Disallow: /api/
+Disallow: /#dashboard
