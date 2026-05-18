@@ -1712,7 +1712,7 @@ select option{background:var(--surface);color:var(--text)}
   <a href="#l-industries" onclick="toggleLandMenu()">&#127970; Industries</a>
   <a href="#l-pricing" onclick="toggleLandMenu()">&#128176; Pricing</a>
   <a href="#l-faq" onclick="toggleLandMenu()">&#10067; FAQ</a>
-  <a href="mailto:sagar.yadav.connect@gmail.com" onclick="toggleLandMenu()">&#128231; Contact</a>
+  <a href="mailto:support@taskroom.in" onclick="toggleLandMenu()">&#128231; Contact</a>
   <button onclick="showLogin();toggleLandMenu()">Sign In to Dashboard</button>
   <button onclick="openPlanChooser();toggleLandMenu()" style="color:var(--primary-light);font-weight:700;background:rgba(19,127,236,.08)">Start Free &#8594;</button>
 </div>
@@ -2085,7 +2085,7 @@ select option{background:var(--surface);color:var(--text)}
     <p style="color:var(--text2);font-size:16px;max-width:460px;margin:0 auto 36px;font-weight:300">No credit card. No setup fees. Your full team can be up and running in under 30 minutes.</p>
     <button class="l-btn-primary" style="padding:16px 36px;font-size:16px" onclick="openPlanChooser()">Create your organization &#8594;</button>
     <div style="margin-top:18px;font-size:12.5px;color:var(--text3);font-family:'IBM Plex Mono',monospace">
-      Questions? <a href="mailto:sagar.yadav.connect@gmail.com" style="color:var(--primary-light);text-decoration:none">sagar.yadav.connect@gmail.com</a>
+      Questions? <a href="mailto:support@taskroom.in" style="color:var(--primary-light);text-decoration:none">support@taskroom.in</a>
       &nbsp;·&nbsp; <a href="tel:+919987603256" style="color:var(--primary-light);text-decoration:none">+91 99876 03256</a>
     </div>
   </div>
@@ -2119,9 +2119,9 @@ select option{background:var(--surface);color:var(--text)}
             <svg width="13" height="13" fill="currentColor" viewBox="0 0 16 16"><path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58L3.654 1.328z"/></svg>
             +91 99876 03256
           </a>
-          <a href="mailto:sagar.yadav.connect@gmail.com" class="l-footer-contact-item">
+          <a href="mailto:support@taskroom.in" class="l-footer-contact-item">
             <svg width="13" height="13" fill="currentColor" viewBox="0 0 16 16"><path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2zm13 2.383-4.708 2.825L15 11.105V5.383zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741zM1 11.105l4.708-2.897L1 5.383v5.722z"/></svg>
-            sagar.yadav.connect@gmail.com
+            support@taskroom.in
           </a>
         </div>
       </div>
@@ -2149,7 +2149,7 @@ select option{background:var(--surface);color:var(--text)}
         </svg>
         iOS — Coming Soon
       </span>
-        <a href="mailto:sagar.yadav.connect@gmail.com" class="l-footer-app-link" style="margin-top:8px">&#128172; Enterprise inquiry</a>
+        <a href="mailto:support@taskroom.in" class="l-footer-app-link" style="margin-top:8px">&#128172; Enterprise inquiry</a>
       </div>
       <!-- Legal -->
       <div class="l-footer-col">
@@ -2165,7 +2165,7 @@ select option{background:var(--surface);color:var(--text)}
       <div class="l-footer-bottom-right">
         <a href="tel:+919987603256" style="color:var(--text3);font-size:12px;text-decoration:none">+91 99876 03256</a>
         <span style="color:var(--text4)">·</span>
-        <a href="mailto:sagar.yadav.connect@gmail.com" style="color:var(--text3);font-size:12px;text-decoration:none">sagar.yadav.connect@gmail.com</a>
+        <a href="mailto:support@taskroom.in" style="color:var(--text3);font-size:12px;text-decoration:none">support@taskroom.in</a>
       </div>
     </div>
   </div>
@@ -2760,7 +2760,8 @@ select option{background:var(--surface);color:var(--text)}
    ══════════════════════════════════════════════════════════════════════ */
 
 <!-- const BASE = 'https://taskroom-backend.onrender.com/api'; -->
-const BASE = 'https://api.taskroom.in/api';
+const BASEs = 'https://api.taskroom.in/api';
+const BASE = 'http://localhost:3000/api';
 let _user=null,_token=null,_org=null;
 let _pg=1,_rpg=1,_tpg=1,_apg=1,_mpg=1;
 let _taskFilter='',_currentTaskId=null,_currentRoomId=null;
@@ -3262,7 +3263,7 @@ function buildBillingHTML(status,plans,history){
     let ctaHtml='';
     const amount=_billingCycle==='annual'&&yearly>0?yearly:monthly;
     if(isContactSales){
-      ctaHtml=`<a href="mailto:sagar.yadav.connect@gmail.com?subject=Enterprise%20Inquiry%20—%20TaskRoom" class="btn btn-ghost w-full" style="text-align:center">Contact Sales →</a>`;
+      ctaHtml=`<a href="mailto:support@taskroom.in?subject=Enterprise%20Inquiry%20—%20TaskRoom" class="btn btn-ghost w-full" style="text-align:center">Contact Sales →</a>`;
     } else if(isFree||isCurrentActual){
       ctaHtml=`<button class="btn btn-ghost w-full" disabled>${isCurrentActual?'Current Plan':'Free Plan'}</button>`;
     } else if(isTrialPlan){
@@ -4775,7 +4776,7 @@ applyMobNavTheme();
         },
         {
           "@type": "ContactPoint",
-          "email": "sagar.yadav.connect@gmail.com",
+          "email": "support@taskroom.in",
           "contactType": "Sales"
         }
       ],
