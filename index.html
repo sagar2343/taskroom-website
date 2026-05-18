@@ -2759,9 +2759,9 @@ select option{background:var(--surface);color:var(--text)}
    TASKROOM — COMPLETE DASHBOARD JAVASCRIPT
    ══════════════════════════════════════════════════════════════════════ */
 
-<!-- const BASE = 'https://taskroom-backend.onrender.com/api'; -->
-const BASEs = 'https://api.taskroom.in/api';
-const BASE = 'http://localhost:3000/api';
+<!-- const BASE = 'https://taskroom-backend.onrender.com/api';
+const BASE = 'http://localhost:3000/api'; -->
+const BASE = 'https://api.taskroom.in/api';
 let _user=null,_token=null,_org=null;
 let _pg=1,_rpg=1,_tpg=1,_apg=1,_mpg=1;
 let _taskFilter='',_currentTaskId=null,_currentRoomId=null;
@@ -3978,116 +3978,198 @@ function openCreateOrgWithPlan(plan){
 
 /* ── CREATE ORG ─────────────────────────────────────────────────────── */
 function openCreateOrg(){_selectedLandingPlan='starter';openM('modal-create');clearA('alert-create');}
-async function submitCreate(e){
+async function submitCreate(e) {
   e.preventDefault();
-  const name=$('in-name').value.trim(),email=$('in-email').value.trim();
-  const mgrName=$('in-mgr-name').value.trim(),mgrUser=$('in-mgr-user').value.trim();
-  const mgrPass=$('in-mgr-pass').value,mgrMobile=$('in-mgr-mobile').value.trim();
-  ['fg-name','fg-email','fg-mgr-name','fg-mgr-user','fg-mgr-pass','fg-mgr-mobile'].forEach(id=>$(id)?.classList.remove('field-error'));
-  let ok=true;
-  if(!name){$('fg-name')?.classList.add('field-error');ok=false;}
-  if(!email||!/[^@]+@[^@]+\.[^@]+/.test(email)){$('fg-email')?.classList.add('field-error');ok=false;}
-  if(!mgrName){$('fg-mgr-name')?.classList.add('field-error');ok=false;}
-  if(!mgrUser||mgrUser.length<3){$('fg-mgr-user')?.classList.add('field-error');ok=false;}
-  if(!mgrPass||mgrPass.length<6){$('fg-mgr-pass')?.classList.add('field-error');ok=false;}
-  if(!mgrMobile||mgrMobile.length!==10){$('fg-mgr-mobile')?.classList.add('field-error');ok=false;}
-  if(!ok)return;
+  const name    = $('in-name').value.trim();
+  const email   = $('in-email').value.trim();
+  const mgrName = $('in-mgr-name').value.trim();
+  const mgrUser = $('in-mgr-user').value.trim();
+  const mgrPass = $('in-mgr-pass').value;
+  const mgrMob  = $('in-mgr-mobile').value.trim();
+  const domain  = $('in-domain').value.trim();
 
-  const btn=$('btn-create');
-  btn.innerHTML='<span class="spinner spinner-xs" style="display:inline-block;border-top-color:#fff;margin:0 5px -2px 0"></span> Creating…';
-  btn.disabled=true;
+  // ── Client-side validation ──────────────────────────────────────────
+  ['fg-name','fg-email','fg-mgr-name','fg-mgr-user',
+   'fg-mgr-pass','fg-mgr-mobile'].forEach(id => $(id)?.classList.remove('field-error'));
   clearA('alert-create');
 
-  const body={
-    name,contactEmail:email,
-    contactPhone:$('in-phone').value.trim()||undefined,
-    domain:$('in-domain').value.trim()||undefined,
-    address:{
-      city:$('in-city')?.value.trim()||undefined,
-      state:$('in-state')?.value.trim()||undefined,
-      pincode:$('in-pin')?.value.trim()||undefined,
-      country:$('in-country')?.value.trim()||'India'
-    }
-  };
+  let ok = true;
+  if (!name)                           { $('fg-name')?.classList.add('field-error'); ok = false; }
+  if (!email || !/[^@]+@[^@]+\.[^@]+/.test(email))
+                                       { $('fg-email')?.classList.add('field-error'); ok = false; }
+  if (!mgrName)                        { $('fg-mgr-name')?.classList.add('field-error'); ok = false; }
+  if (!mgrUser || mgrUser.length < 3)  { $('fg-mgr-user')?.classList.add('field-error'); ok = false; }
+  if (!mgrPass || mgrPass.length < 6)  { $('fg-mgr-pass')?.classList.add('field-error'); ok = false; }
+  if (!mgrMob  || mgrMob.length !== 10){ $('fg-mgr-mobile')?.classList.add('field-error'); ok = false; }
 
-  try{
-    // ── STEP 1: Create organization ──────────────────────────────────────
-    const d=await api('POST','/organization/create',body);
-    if(!d.success){
-      showA('alert-create','error',esc(d.message||'Failed to create organization'));
+  // Warn if domain looks like an email
+  if (domain && domain.includes('@')) {
+    showA('alert-create', 'amber',
+      '⚠️ The <strong>Company Domain</strong> field should be like <code>company.com</code> — not an email address.');
+    $('in-domain').focus();
+    return;
+  }
+
+  if (!ok) return;
+
+  const btn = $('btn-create');
+  btn.innerHTML = '<span class="spinner spinner-xs" style="display:inline-block;border-top-color:#fff;margin:0 5px -2px 0"></span> Checking…';
+  btn.disabled  = true;
+
+  try {
+    // ── STEP 1: Pre-check username availability ────────────────────────
+    // We do this BEFORE creating the org so we never have an orphaned org
+    btn.innerHTML = '<span class="spinner spinner-xs" style="display:inline-block;border-top-color:#fff;margin:0 5px -2px 0"></span> Checking username…';
+
+    const checkRes = await api('POST', '/auth/check-username', {
+      username: mgrUser,
+    }, null).catch(() => null);
+
+    if (checkRes && !checkRes.available) {
+      $('fg-mgr-user')?.classList.add('field-error');
+      showA('alert-create', 'error',
+        `Username <strong>"${esc(mgrUser)}"</strong> is already taken. Please choose a different username.`);
       return;
     }
 
-    const rawOrg=d.data?.organization||d.data;
-    const code=rawOrg.code||'';
-    if(!code){
-      showA('alert-create','error','Organization created but no code returned. Please contact support.');
+    // ── STEP 2: Create organization ────────────────────────────────────
+    btn.innerHTML = '<span class="spinner spinner-xs" style="display:inline-block;border-top-color:#fff;margin:0 5px -2px 0"></span> Creating organization…';
+
+    const orgBody = {
+      name,
+      contactEmail:  email,
+      contactPhone:  $('in-phone').value.trim() || undefined,
+      domain:        domain || undefined,
+      address: {
+        city:    $('in-city')?.value.trim()    || undefined,
+        state:   $('in-state')?.value.trim()   || undefined,
+        pincode: $('in-pin')?.value.trim()     || undefined,
+        country: $('in-country')?.value.trim() || 'India',
+      },
+    };
+
+    const orgRes = await api('POST', '/organization/create', orgBody, null);
+
+    if (!orgRes.success) {
+      showA('alert-create', 'error', esc(orgRes.message || 'Could not create organization.'));
       return;
     }
 
-    // ── STEP 2: Register manager account ────────────────────────────────
-    btn.innerHTML='<span class="spinner spinner-xs" style="display:inline-block;border-top-color:#fff;margin:0 5px -2px 0"></span> Creating manager account…';
-    const regBody={username:mgrUser,password:mgrPass,fullName:mgrName,mobile:mgrMobile,role:'manager',organizationCode:code};
-    const regR=await api('POST','/auth/register',regBody,null);
+    const rawOrg = orgRes.data?.organization || orgRes.data;
+    const code   = rawOrg.code || '';
 
-    if(!regR.success){
-      // Org was created but manager registration failed — show a specific error
-      showA('alert-create','error',
-        `✅ Organization "${name}" created (code: ${code}). But manager account creation failed: ${esc(regR.message||'Unknown error')}. `+
-        `Please sign in using your org code and try registering again, or contact support.`
-      );
-      // Still store the org so the user knows their code
-      _org=rawOrg;_user=null;_token=null;save();
+    if (!code) {
+      showA('alert-create', 'error', 'Organization was created but no code was returned. Please contact support.');
       return;
     }
 
-    // ── STEP 3: Use token from register (no second login needed) ────────
-    _token=regR.data?.token;
-    _user=regR.data?.user;
+    // ── STEP 3: Register manager account ──────────────────────────────
+    btn.innerHTML = '<span class="spinner spinner-xs" style="display:inline-block;border-top-color:#fff;margin:0 5px -2px 0"></span> Creating your account…';
 
-    if(!_token||!_user){
-      // Fallback: try explicit login
-      btn.innerHTML='<span class="spinner spinner-xs" style="display:inline-block;border-top-color:#fff;margin:0 5px -2px 0"></span> Signing in…';
-      const loginR=await api('POST','/auth/login',{username:mgrUser,password:mgrPass,organizationCode:code},null);
-      if(!loginR.success){
-        showA('alert-create','error',
-          `✅ Organization created (code: ${code}) & manager account created! But auto-login failed: ${esc(loginR.message||'Unknown error')}. `+
-          `Please sign in manually using your org code.`
-        );
+    const regRes = await api('POST', '/auth/register', {
+      username:         mgrUser,
+      password:         mgrPass,
+      fullName:         mgrName,
+      mobile:           mgrMob,
+      role:             'manager',
+      organizationCode: code,
+    }, null);
+
+    if (!regRes.success) {
+      // Org was created — tell user their code so they're not stranded
+      showA('alert-create', 'error', `
+        <strong>Account creation failed</strong><br>
+        ${esc(regRes.message || 'Please try again.')}<br><br>
+        Your organization was created with code 
+        <strong style="font-family:monospace;color:var(--primary-light);
+                       letter-spacing:2px">${esc(code)}</strong>.<br>
+        <span style="font-size:12px;color:var(--text3)">
+          Sign in using this code once you resolve the issue above.
+        </span>
+      `);
+      // Highlight the offending field if server told us
+      if (regRes.field === 'username') $('fg-mgr-user')?.classList.add('field-error');
+      if (regRes.field === 'mobile')   $('fg-mgr-mobile')?.classList.add('field-error');
+      return;
+    }
+
+    // ── STEP 4: Store session ──────────────────────────────────────────
+    _token = regRes.data?.token;
+    _user  = regRes.data?.user;
+
+    if (!_token || !_user) {
+      // Fallback login
+      btn.innerHTML = '<span class="spinner spinner-xs" style="display:inline-block;border-top-color:#fff;margin:0 5px -2px 0"></span> Signing in…';
+      const loginRes = await api('POST', '/auth/login', {
+        username:         mgrUser,
+        password:         mgrPass,
+        organizationCode: code,
+      }, null);
+
+      if (!loginRes.success) {
+        showA('alert-create', 'amber', `
+          <strong>Almost there!</strong> Your organization and account were created.<br>
+          Please <a href="#" onclick="closeM('modal-create');showLogin();return false"
+            style="color:var(--primary-light);font-weight:700">sign in</a> 
+          with code <strong style="font-family:monospace">${esc(code)}</strong>.
+        `);
         return;
       }
-      _token=loginR.data.token;
-      _user=loginR.data.user;
+      _token = loginRes.data.token;
+      _user  = loginRes.data.user;
     }
 
-    // ── STEP 4: Fetch full org details (gets virtual fields: effectivePlan, limits etc.) ─
-    try{
-      const oid=_user.organization?._id||_user.organization||rawOrg._id;
-      const od=await api('GET','/organization/detail/'+oid);
-      _org=od.success?(od.data?.organization||od.data):rawOrg;
-    }catch(_){_org=rawOrg;}
+    // ── STEP 5: Fetch full org ─────────────────────────────────────────
+    try {
+      const oid = _user.organization?._id || _user.organization || rawOrg._id;
+      const od  = await api('GET', '/organization/detail/' + oid);
+      _org = od.success ? (od.data?.organization || od.data) : rawOrg;
+    } catch (_) { _org = rawOrg; }
 
     save();
     closeM('modal-create');
 
-    // ── STEP 5: Show success modal ───────────────────────────────────────
-    $('post-create-code').textContent=code;
-    if($('success-code'))$('success-code').textContent=code;
-    const planOffer=$('post-create-plan-offer');
-    const isTrial=['growth','business','enterprise'].includes(_selectedLandingPlan);
-    if(isTrial){
-      const label=({growth:'Growth',business:'Business',enterprise:'Enterprise'}[_selectedLandingPlan]||'Growth');
-      planOffer.innerHTML=`<div class="alert alert-info" style="text-align:left;margin-bottom:0"><div><strong>✅ 14-day ${label} Trial Active!</strong><div style="font-size:12.5px;margin-top:4px;line-height:1.6">Your org has full ${label} features for 14 days. Upgrade before the trial ends to keep them.<br><br>Share your org code with employees: <strong style="font-family:monospace;color:var(--primary-light)">${code}</strong></div></div></div>`;
-    }else{
-      planOffer.innerHTML=`<div class="alert alert-success" style="text-align:left;margin-bottom:0"><div><strong>🎉 Organization Created!</strong><div style="font-size:12.5px;margin-top:4px;line-height:1.6">Share your org code with your team to get started. Upgrade anytime from <strong>Plans &amp; Billing</strong>.<br><br>Org Code: <strong style="font-family:monospace;color:var(--primary-light)">${code}</strong></div></div></div>`;
+    // ── STEP 6: Show success ───────────────────────────────────────────
+    $('post-create-code').textContent = code;
+    if ($('success-code')) $('success-code').textContent = code;
+
+    const planOffer = $('post-create-plan-offer');
+    const isTrial   = ['growth', 'business', 'enterprise'].includes(_selectedLandingPlan);
+
+    if (isTrial) {
+      const label = ({ growth: 'Growth', business: 'Business', enterprise: 'Enterprise' }[_selectedLandingPlan] || 'Growth');
+      planOffer.innerHTML = `
+        <div class="alert alert-info" style="text-align:left;margin-bottom:0">
+          <div>
+            <strong>✅ 14-day ${label} Trial Active!</strong>
+            <div style="font-size:12.5px;margin-top:4px;line-height:1.6">
+              Full ${label} features for 14 days. Upgrade before trial ends to keep them.<br>
+              Share org code with employees: 
+              <strong style="font-family:monospace;color:var(--primary-light)">${code}</strong>
+            </div>
+          </div>
+        </div>`;
+    } else {
+      planOffer.innerHTML = `
+        <div class="alert alert-success" style="text-align:left;margin-bottom:0">
+          <div>
+            <strong>🎉 You're all set!</strong>
+            <div style="font-size:12.5px;margin-top:4px;line-height:1.6">
+              Share your org code with your team to get started.<br>
+              Org Code: <strong style="font-family:monospace;color:var(--primary-light)">${code}</strong>
+            </div>
+          </div>
+        </div>`;
     }
+
     openM('modal-post-create');
 
-  }catch(err){
-    console.error('Create org error:',err);
-    showA('alert-create','error','Network error. Please check your connection and try again.');
-  }finally{
-    btn.innerHTML='🚀 Create Organization &amp; Account';btn.disabled=false;
+  } catch (err) {
+    console.error('Create org error:', err);
+    showA('alert-create', 'error', 'Network error. Please check your connection and try again.');
+  } finally {
+    btn.innerHTML = '🚀 Create Organization &amp; Account';
+    btn.disabled  = false;
   }
 }
 
