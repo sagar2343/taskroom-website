@@ -1274,8 +1274,22 @@ select option{background:var(--surface);color:var(--text)}
 .l-save-badge{background:rgba(16,185,129,.15);color:var(--green);font-size:11px;font-weight:700;padding:2px 8px;border-radius:100px;font-family:'IBM Plex Mono',monospace;}
 
 .l-pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:var(--lborder);margin-top:44px;}
-.l-price-card{background:var(--lbg2);padding:32px 24px;position:relative;transition:background .2s;}
-.l-price-card.featured{background:var(--lbg3);outline:2px solid rgba(19,127,236,.5);outline-offset:-1px;}
+.l-price-card {
+  background: var(--lbg2);
+  padding: 32px 24px;
+  position: relative;
+  transition: background .2s;
+  /* ADD these three lines: */
+  display: flex;
+  flex-direction: column;
+  min-height: 520px;          /* keeps all cards the same min height */
+}
+
+.l-price-card.featured {
+  background: var(--lbg3);
+  outline: 2px solid rgba(19,127,236,.5);
+  outline-offset: -1px;
+}
 .l-price-recommended{
   position:absolute;top:-13px;left:50%;transform:translateX(-50%);
   background:linear-gradient(90deg,var(--primary),var(--primary-light));color:#fff;
@@ -1289,18 +1303,35 @@ select option{background:var(--surface);color:var(--text)}
 .l-price-yearly{font-size:12px;color:var(--green);font-family:'IBM Plex Mono',monospace;margin-bottom:8px;}
 .l-price-seats{font-size:11.5px;color:var(--primary-light);font-family:'IBM Plex Mono',monospace;margin-bottom:20px;}
 .l-price-divider{border:none;border-top:1px solid var(--lborder);margin-bottom:18px;}
-.l-price-features{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:24px;}
+.l-price-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-bottom: 24px;
+  flex: 1;                    /* ADD this — pushes CTA to bottom */
+}
 .l-price-features li{font-size:13px;color:var(--text2);display:flex;align-items:flex-start;gap:7px;}
 .l-price-features li::before{content:'✓';color:var(--primary-light);font-weight:700;flex-shrink:0;}
 .l-price-features li.dim{color:var(--text3);}
 .l-price-features li.dim::before{content:'–';color:var(--text3);}
-.l-price-cta{
-  display:block;text-align:center;
-  background:var(--lsurface);border:1px solid var(--lborder2);
-  color:var(--text);padding:11px;border-radius:6px;
-  font-size:13.5px;font-weight:600;text-decoration:none;cursor:pointer;
-  transition:all .2s;font-family:'Sora',sans-serif;
+.l-price-cta {
+  display: block;
+  text-align: center;
+  background: var(--lsurface);
+  border: 1px solid var(--lborder2);
+  color: var(--text);
+  padding: 11px;
+  border-radius: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all .2s;
+  font-family: 'Sora', sans-serif;
+  margin-top: auto;           /* ADD this — pins button to bottom */
 }
+
 .l-price-cta:hover{background:var(--lbg3);border-color:var(--text3);}
 .l-price-cta.featured{background:linear-gradient(135deg,var(--primary),var(--primary-light));border-color:transparent;color:#fff;}
 .l-price-cta.featured:hover{box-shadow:0 4px 20px rgba(19,127,236,.35);}
@@ -1970,7 +2001,14 @@ select option{background:var(--surface);color:var(--text)}
         <span>Yearly <span class="l-save-badge">Save 16%</span></span>
       </div>
     </div>
-    <div class="l-pricing-grid l-fade-up">
+    <div class="l-pricing-grid l-fade-up" id="l-pricing-grid">
+      <!-- Loading state — replaced by loadLandingPlans() -->
+      <div style="grid-column:1/-1;padding:44px;text-align:center;color:var(--text3)">
+        <div class="spinner" style="margin:0 auto 12px"></div>
+        <div style="font-size:13px">Loading plans…</div>
+      </div>
+    </div>
+    <!-- <div class="l-pricing-grid l-fade-up">
       <div class="l-price-card">
         <div class="l-price-plan">Starter</div>
         <div class="l-price-amount"><sup>&#8377;</sup><span class="lp-amount">199</span></div>
@@ -2024,7 +2062,7 @@ select option{background:var(--surface);color:var(--text)}
         </ul>
         <a href="mailto:hello@taskroom.in" class="l-price-cta">Talk to sales &#8594;</a>
       </div>
-    </div>
+    </div> -->
     <!-- ROI Calculator -->
     <div class="l-calc-wrap l-fade-up">
       <div class="l-calc-title">&#128176; Estimate your monthly cost</div>
@@ -2468,7 +2506,7 @@ select option{background:var(--surface);color:var(--text)}
     <div><div class="modal-title">Choose Your Plan</div><div class="modal-sub">Start lean. Scale as you grow. 14-day trial included on Growth &amp; Business.</div></div>
     <div class="modal-close" onclick="closeM('modal-plan-chooser')">✕</div>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:8px">
+  <div id="l-plan-chooser-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:8px">
     <!-- Starter -->
     <div onclick="selectLandingPlan('starter',this)" class="plan-chooser-card" style="border:2px solid var(--border);border-radius:var(--r);padding:20px;cursor:pointer;transition:all .2s;background:var(--surface2)">
       <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px">Starter</div>
@@ -2760,8 +2798,8 @@ select option{background:var(--surface);color:var(--text)}
    ══════════════════════════════════════════════════════════════════════ */
 
 // const BASE = 'https://taskroom-backend.onrender.com/api';
-// const BASE = 'http://localhost:3000/api';
-const BASE = 'https://api.taskroom.in/api';
+const BASE = 'http://localhost:3000/api';
+//const BASE = 'https://api.taskroom.in/api';
 let _user=null,_token=null,_org=null;
 let _pg=1,_rpg=1,_tpg=1,_apg=1,_mpg=1;
 let _taskFilter='',_currentTaskId=null,_currentRoomId=null;
@@ -4561,96 +4599,324 @@ document.querySelectorAll('a[href^="#l-"]').forEach(a=>{
 });
 
 /* Pricing toggle (monthly ↔ yearly) */
-const _prices={
-  starter:{monthly:199,yearly:1999},
-  growth:{monthly:499,yearly:4999},
-  business:{monthly:999,yearly:9999}
-};
-function updateLandingPricing(yearly){
-  const cards=document.querySelectorAll('.l-price-card');
-  const plans=['starter','growth','business'];
-  cards.forEach((card,i)=>{
-    if(!plans[i])return;
-    const p=_prices[plans[i]];
-    const amountEl=card.querySelector('.lp-amount');
-    const periodEl=card.querySelector('.lp-period');
-    const yearlyEl=card.querySelector('.l-price-yearly');
-    if(amountEl)amountEl.textContent=yearly?Math.round(p.yearly/12):p.monthly;
-    if(periodEl)periodEl.textContent=yearly?'per month (billed yearly)':'per month';
-    if(yearlyEl){
-      if(yearly){yearlyEl.textContent=`₹${p.yearly.toLocaleString('en-IN')}/year billed now`;}
-      else{const save=p.monthly*12-p.yearly;yearlyEl.textContent=`₹${p.yearly.toLocaleString('en-IN')}/year · save ₹${save.toLocaleString('en-IN')}`;}
+/* ── LANDING PLANS — loaded from DB ─────────────────────────────────── */
+let _landingPlans = [];
+
+async function loadLandingPlans() {
+  try {
+    const res = await fetch(BASE + '/billing/plans/public');
+    const d   = await res.json();
+    if (!d.success || !d.data?.length) return;
+    _landingPlans = d.data;
+    renderLandingPricingGrid(_landingPlans, false);
+    renderLandingPlanChooser(_landingPlans);
+    updateLandCalcFromPlans(_landingPlans);
+  } catch (e) {
+    console.error('[loadLandingPlans]', e);
+    // Silently fall back — static HTML already gone, show fallback
+    const grid = $('l-pricing-grid');
+    if (grid) grid.innerHTML = `<div style="grid-column:1/-1;padding:40px;text-align:center;color:var(--red);font-size:13px">
+      Failed to load pricing. <a href="mailto:support@taskroom.in" style="color:var(--primary-light)">Contact us</a> for current pricing.
+    </div>`;
+  }
+}
+
+/* Renders the landing pricing grid from plan data */
+function renderLandingPricingGrid(plans, yearly) {
+  const grid = $('l-pricing-grid');
+  if (!grid) return;
+
+  const FEAT_ICONS = {
+    liveTracking: '📍 Live GPS tracking',
+    attendanceAnalytics: '📊 Attendance analytics',
+    taskHistory: '🕒 Task history',
+    notifications: '🔔 Push notifications',
+    performanceDashboard: '🏆 Performance dashboard',
+    routeHistory: '🗺️ Route history',
+    advancedReports: '📁 Advanced reports',
+    exportReports: '📄 PDF & Excel export',
+    prioritySupport: '⭐ Priority support',
+    premiumAnalytics: '✨ Premium analytics',
+  };
+
+  grid.innerHTML = plans.map(p => {
+    const isFeatured   = p.slug === 'growth';
+    const isEnterprise = !!p.isContactSales;
+    const monthly      = p.monthlyPrice || 0;
+    const yearlyTotal  = p.yearlyPrice  || 0;
+    const annualSaving = Math.round(monthly * 12 - yearlyTotal);
+
+    // ── Price block ───────────────────────────────────────────────────
+    let priceHtml;
+    if (isEnterprise) {
+      priceHtml = `
+        <div class="l-price-amount" style="font-size:22px;margin-top:6px">Custom<br>Pricing</div>
+        <div class="l-price-period" style="margin-top:6px">₹${monthly.toLocaleString('en-IN')}+/month</div>
+        <div class="l-price-yearly" style="visibility:hidden">-</div>`;
+    } else {
+      const display = yearly && yearlyTotal ? Math.round(yearlyTotal / 12) : monthly;
+      priceHtml = `
+        <div class="l-price-amount"><sup>&#8377;</sup><span class="lp-amount">${display}</span></div>
+        <div class="l-price-period"><span class="lp-period">${yearly ? 'per month (billed yearly)' : 'per month'}</span></div>
+        <div class="l-price-yearly">
+          ₹${yearlyTotal.toLocaleString('en-IN')}/year · save ₹${annualSaving.toLocaleString('en-IN')}
+        </div>`;
     }
-  });
+
+    // ── Limits line ───────────────────────────────────────────────────
+    const lv = v => (v === -1 || v === 99999) ? 'Unlimited' : v;
+    const limitsLine = isEnterprise
+      ? 'Unlimited employees · Rooms · Managers'
+      : `Up to ${lv(p.maxEmployees)} employees · ${lv(p.maxRooms)} Rooms · ${lv(p.maxManagers)} Manager${p.maxManagers !== 1 ? 's' : ''}`;
+
+    // ── Feature list ──────────────────────────────────────────────────
+    // Use featureLabels from DB; supplement with feature flags for unlocked ones
+    const labelSet = new Set(p.featureLabels || []);
+    const extraFeats = Object.entries(FEAT_ICONS)
+      .filter(([key]) => p.features?.[key] && ![...labelSet].some(l => l.toLowerCase().includes(key.replace(/([A-Z])/g, ' $1').toLowerCase().trim().split(' ')[0])))
+      .map(([, label]) => label);
+    const allLabels = [...(p.featureLabels || []), ...extraFeats].slice(0, 7);
+
+    // Prepend "Everything in X" for higher tiers
+    const prevPlanLabel = plans[plans.indexOf(p) - 1]?.label;
+    const fullFeatures = [
+      ...(prevPlanLabel && !isEnterprise ? [`Everything in ${prevPlanLabel}`] : []),
+      ...allLabels,
+    ];
+
+    const featuresHtml = fullFeatures
+      .map(f => `<li>${esc(f)}</li>`)
+      .join('');
+
+    // Dim features that are false on this plan
+    const lockedFeats = Object.entries(FEAT_ICONS)
+      .filter(([key]) => !p.features?.[key])
+      .map(([, label]) => `<li class="dim">${label}</li>`)
+      .slice(0, 3)
+      .join('');
+
+    // ── CTA ───────────────────────────────────────────────────────────
+    let ctaHtml;
+    if (isEnterprise) {
+      ctaHtml = `<a href="mailto:hello@taskroom.in" class="l-price-cta">Talk to sales &#8594;</a>`;
+    } else if (isFeatured) {
+      ctaHtml = `<button class="l-price-cta featured" onclick="openPlanChooser('${p.slug}')">Start 14-day trial &#8594;</button>`;
+    } else {
+      ctaHtml = `<button class="l-price-cta" onclick="openPlanChooser('${p.slug}')">Get started &#8594;</button>`;
+    }
+
+    return `<div class="l-price-card ${isFeatured ? 'featured' : ''}">
+      ${isFeatured ? '<div class="l-price-recommended">MOST POPULAR</div>' : ''}
+      <div class="l-price-plan">${esc(p.label)}</div>
+      ${priceHtml}
+      <div class="l-price-seats">${limitsLine}</div>
+      <hr class="l-price-divider">
+      <ul class="l-price-features">${featuresHtml}${lockedFeats}</ul>
+      ${ctaHtml}
+    </div>`;
+  }).join('');
+
+  initLandingAnimations();
+}
+
+/* Re-render when the yearly toggle fires */
+function updateLandingPricing(yearly) {
+  if (_landingPlans.length) {
+    renderLandingPricingGrid(_landingPlans, yearly);
+  }
+}
+
+/* Renders plan chooser modal cards from DB data */
+function renderLandingPlanChooser(plans) {
+  const grid = $('l-plan-chooser-grid');
+  if (!grid) return;
+
+  grid.innerHTML = plans.map((p, i) => {
+    const isFeatured   = p.slug === 'growth';
+    const isEnterprise = !!p.isContactSales;
+    const monthly      = p.monthlyPrice || 0;
+    const yearlyTotal  = p.yearlyPrice  || 0;
+
+    const lv = v => (v === -1 || v === 99999) ? 'Unlimited' : v;
+    const subtitle = isEnterprise
+      ? `₹${monthly.toLocaleString('en-IN')}+/month · Unlimited`
+      : `₹${yearlyTotal.toLocaleString('en-IN')}/year · ${lv(p.maxEmployees)} emp · ${lv(p.maxRooms)} rooms`;
+
+    const feats = (p.featureLabels || []).slice(0, 5)
+      .map(f => `<li>✓ ${esc(f)}</li>`).join('');
+
+    const btnClass = isFeatured ? 'btn btn-primary w-full' : 'btn btn-ghost w-full';
+    const btnText  = isEnterprise ? 'Talk to sales →'
+                   : isFeatured   ? 'Start 14-day trial →'
+                   :                'Get started →';
+
+    const borderStyle = isFeatured
+      ? 'border:2px solid var(--primary);background:linear-gradient(160deg,var(--surface),rgba(19,127,236,.06));position:relative'
+      : 'border:2px solid var(--border);background:var(--surface2)';
+
+    return `<div onclick="selectLandingPlan('${p.slug}',this)" class="plan-chooser-card"
+          style="${borderStyle};border-radius:var(--r);padding:20px;cursor:pointer;transition:all .2s">
+      ${isFeatured ? `<div style="position:absolute;top:-12px;left:16px;background:linear-gradient(90deg,var(--primary),#4a9ff5);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px">MOST POPULAR</div>` : ''}
+      <div style="font-size:11px;font-weight:700;color:${isFeatured ? 'var(--primary-light)' : 'var(--text3)'};text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;margin-top:${isFeatured ? '8' : '0'}px">${esc(p.label)}</div>
+      <div style="font-size:32px;font-weight:900;letter-spacing:-1.5px;margin-bottom:2px">
+        ${isEnterprise ? 'Custom' : `₹${monthly.toLocaleString('en-IN')}<span style="font-size:14px;font-weight:400;color:var(--text2)">/mo</span>`}
+      </div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:14px">${subtitle}</div>
+      <ul style="list-style:none;font-size:12.5px;color:var(--text2);display:flex;flex-direction:column;gap:6px">${feats}</ul>
+      <button class="${btnClass}" style="margin-top:16px;font-size:13px">${btnText}</button>
+    </div>`;
+  }).join('');
+}
+
+/* Update ROI calculator dropdowns from DB plan data */
+function updateLandCalcFromPlans(plans) {
+  const sel = $('l-calc-plan');
+  if (!sel) return;
+  sel.innerHTML = plans
+    .filter(p => !p.isContactSales)
+    .map(p => `<option value="${p.monthlyPrice}" data-max="${p.maxEmployees}" data-yearly="${p.yearlyPrice}" ${p.slug === 'growth' ? 'selected' : ''}>
+      ${esc(p.label)} (₹${p.monthlyPrice.toLocaleString('en-IN')}/month — up to ${p.maxEmployees === -1 ? 'unlimited' : p.maxEmployees} emp)
+    </option>`)
+    .join('');
+  updateLandCalc();
 }
 
 /* ROI Calculator */
+/* ══════════════════════════════════════════════════════════════════════
+   LANDING PRICING FIX
+   Two targeted replacements in your <script> block.
+   ══════════════════════════════════════════════════════════════════════ */
+ 
+ 
+/* ── FIX 1: REPLACE the duplicate / static updateLandingPricing ─────────
+   You have TWO definitions of this function. The second (static) one
+   clobbers the first (DB-driven) one. DELETE the second definition
+   entirely — the one that looks like:
+ 
+      function updateLandingPricing(yearly){
+        const cards=document.querySelectorAll('.l-price-card');
+        const plans=['starter','growth','business'];
+        ...
+      }
+ 
+   Keep ONLY the DB-driven version below (already in your file):
+ 
+      function updateLandingPricing(yearly) {
+        if (_landingPlans.length) {
+          renderLandingPricingGrid(_landingPlans, yearly);
+        }
+      }
+ 
+   ────────────────────────────────────────────────────────────────────── */
+ 
+ 
+/* ── FIX 2: REPLACE updateLandCalc entirely ─────────────────────────── */
 function updateLandCalc(){
-  const planEl=$('l-calc-plan');
-  const empEl=$('l-calc-emp');
-  const empValEl=$('l-emp-val');
-  if(!planEl||!empEl)return;
-
-  const emps=parseInt(empEl.value)||1;
-  if(empValEl)empValEl.textContent=emps;
-
-  // Plan limits and pricing
-  const plans={
-    199:{label:'Starter',maxEmp:5,yearly:1999},
-    499:{label:'Growth',maxEmp:25,yearly:4999},
-    999:{label:'Business',maxEmp:75,yearly:9999}
+  const planEl   = $('l-calc-plan');
+  const empEl    = $('l-calc-emp');
+  const empValEl = $('l-emp-val');
+  if(!planEl || !empEl) return;
+ 
+  const emps = parseInt(empEl.value) || 1;
+  if(empValEl) empValEl.textContent = emps;
+ 
+  /* ── Build a price→plan lookup ────────────────────────────────────────
+     Prefer live DB data; fall back to static values while plans are
+     still loading (or if the fetch fails entirely).                    */
+  const STATIC_FALLBACK = {
+    199: { label:'Starter',  maxEmp:5,  yearly:1999 },
+    499: { label:'Growth',   maxEmp:25, yearly:4999 },
+    999: { label:'Business', maxEmp:75, yearly:9999 },
   };
-  const base=parseInt(planEl.value)||499;
-  const plan=plans[base]||plans[499];
-
-  // Check if employees exceed plan limit
-  const totalEl=$('l-calc-total');
-  const annualEl=$('l-calc-annual');
-  const baseEl=$('l-calc-base');
-  const seatEl=$('l-calc-seat');
-  const seatLblEl=$('l-calc-seat-lbl');
-  const warnEl=$('l-calc-warn');
-
-  let total=base;
-  let note='';
-
-  if(emps>plan.maxEmp){
-    // Auto-recommend a higher plan
-    if(emps<=5){total=199;note='';}
-    else if(emps<=25){total=499;note='⬆ Growth plan recommended for '+emps+' employees';}
-    else if(emps<=75){total=999;note='⬆ Business plan recommended for '+emps+' employees';}
-    else{total=1999;note='⬆ Enterprise plan — contact us for '+emps+'+ employees';}
+ 
+  let plans;
+  if (_landingPlans && _landingPlans.length > 0) {
+    plans = _landingPlans
+      .filter(p => !p.isContactSales)
+      .reduce((acc, p) => {
+        acc[p.monthlyPrice] = {
+          label:  p.label,
+          maxEmp: p.maxEmployees === -1 ? Infinity : p.maxEmployees,
+          yearly: p.yearlyPrice,
+        };
+        return acc;
+      }, {});
+    /* If the reduce produced an empty object (all plans are contactSales),
+       fall back so we never crash on plan.maxEmp below. */
+    if (!Object.keys(plans).length) plans = STATIC_FALLBACK;
+  } else {
+    plans = STATIC_FALLBACK;
   }
-
-  const annual=total*12;
-  const yearlySave=annual-Object.values(plans).find(p=>p.label===(note?note.includes('Growth')?'Growth':note.includes('Business')?'Business':'Starter':plan.label))?.yearly||0;
-
-  if(totalEl)totalEl.textContent='₹'+total.toLocaleString('en-IN');
-  if(annualEl)annualEl.textContent='= ₹'+annual.toLocaleString('en-IN')+'/year';
-  if(baseEl)baseEl.textContent='₹'+base.toLocaleString('en-IN');
-  if(seatLblEl)seatLblEl.textContent='Employees ('+emps+')';
-  if(seatEl){
-    if(emps<=plan.maxEmp){
-      seatEl.textContent='Included';
-      seatEl.style.color='var(--green)';
+ 
+  const base = parseInt(planEl.value) || 499;
+  /* Guard: if the selected value isn't in our lookup (e.g. select was
+     repopulated with DB values but _landingPlans is still empty on first
+     render), find the closest plan or use the smallest available. */
+  const plan = plans[base] || Object.values(plans)[0];
+  if (!plan) return; // nothing to show yet
+ 
+  const totalEl    = $('l-calc-total');
+  const annualEl   = $('l-calc-annual');
+  const baseEl     = $('l-calc-base');
+  const seatEl     = $('l-calc-seat');
+  const seatLblEl  = $('l-calc-seat-lbl');
+  const warnEl     = $('l-calc-warn');
+  const savedEl    = $('l-calc-time-saved');
+ 
+  /* Recommend a higher plan when employee count exceeds limit */
+  let total = base;
+  let note  = '';
+  const maxEmp = plan.maxEmp === Infinity ? 9999 : plan.maxEmp;
+ 
+  if (emps > maxEmp) {
+    /* Find the cheapest plan that fits */
+    const fittingPlan = Object.entries(plans)
+      .sort((a, b) => Number(a[0]) - Number(b[0]))
+      .find(([, p]) => (p.maxEmp === Infinity || p.maxEmp >= emps));
+ 
+    if (fittingPlan) {
+      total = Number(fittingPlan[0]);
+      note  = `⬆ ${fittingPlan[1].label} plan recommended for ${emps} employees`;
     } else {
-      seatEl.textContent='Exceeds plan limit';
-      seatEl.style.color='var(--amber)';
+      total = 1999;
+      note  = `⬆ Enterprise plan — contact us for ${emps}+ employees`;
     }
   }
+ 
+  const annual = total * 12;
+ 
+  if(totalEl)   totalEl.textContent   = '₹' + total.toLocaleString('en-IN');
+  if(annualEl)  annualEl.textContent  = '= ₹' + annual.toLocaleString('en-IN') + '/year';
+  if(baseEl)    baseEl.textContent    = '₹' + base.toLocaleString('en-IN');
+  if(seatLblEl) seatLblEl.textContent = `Employees (${emps})`;
+ 
+  if(seatEl){
+    if(emps <= maxEmp){
+      seatEl.textContent   = 'Included';
+      seatEl.style.color   = 'var(--green)';
+    } else {
+      seatEl.textContent   = 'Exceeds plan limit';
+      seatEl.style.color   = 'var(--amber)';
+    }
+  }
+ 
   const hoursSaved = emps * 3.5;
   const moneySaved = hoursSaved * 4 * 150;
-  const timeSavedEl = $('l-calc-time-saved');
-  if(timeSavedEl) {
-    timeSavedEl.textContent = `${Math.round(hoursSaved)}hrs/week · ₹${moneySaved.toLocaleString('en-IN')}/month saved`;
+  if(savedEl){
+    savedEl.textContent = `${Math.round(hoursSaved)}hrs/week · ₹${moneySaved.toLocaleString('en-IN')}/month saved`;
   }
-
+ 
   if(warnEl){
-    warnEl.textContent=note;
-    warnEl.style.display=note?'block':'none';
+    warnEl.textContent   = note;
+    warnEl.style.display = note ? 'block' : 'none';
   }
-  // Pulse the total for feedback
-  if(totalEl){totalEl.style.transform='scale(1.08)';setTimeout(()=>{totalEl.style.transform='scale(1)';totalEl.style.transition='transform .15s ease';},150);}
+ 
+  /* Pulse the total for tactile feedback */
+  if(totalEl){
+    totalEl.style.transition = 'transform .15s ease';
+    totalEl.style.transform  = 'scale(1.08)';
+    setTimeout(() => { totalEl.style.transform = 'scale(1)'; }, 150);
+  }
 }
 
 /* FAQ accordion */
@@ -4668,7 +4934,10 @@ document.querySelectorAll('.l-faq-q').forEach(btn=>{
 
 /* Init on load */
 initLandingAnimations();
-updateLandCalc();
+updateLandCalc(); // initial render with fallback values
+
+// Load plans from DB — replaces static pricing grid + plan chooser
+loadLandingPlans();
 
 if(_user&&_token&&_org){showDash();}else{showLanding();}
 
