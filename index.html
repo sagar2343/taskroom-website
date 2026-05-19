@@ -4604,7 +4604,8 @@ let _landingPlans = [];
 
 async function loadLandingPlans() {
   try {
-    const res = await fetch(BASE + '/billing/plans/public');
+    // const res = await fetch(BASE + '/billing/plans/public');
+    const res = await fetch(BASE + '/billing/plans');
     const d   = await res.json();
     if (!d.success || !d.data?.length) return;
     _landingPlans = d.data;
