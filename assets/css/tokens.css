@@ -1,0 +1,96 @@
+/* ═══════════════════════════════════════════════════════════════
+   TASKROOM — DESIGN TOKENS
+   Single source of truth for all design decisions.
+═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Brand ──────────────────────────────────────────────────── */
+  --primary:          #137fec;
+  --primary-light:    #4a9ff5;
+  --primary-glow:     rgba(19,127,236,.18);
+  --primary-subtle:   rgba(19,127,236,.08);
+  --primary-mid:      rgba(19,127,236,.15);
+
+  /* ── Neutral Surface (Dark default) ─────────────────────────── */
+  --bg:       #080d12;
+  --surface:  #0f1822;
+  --surface2: #162030;
+  --surface3: #1c2a3a;
+  --surface4: #243347;
+
+  /* ── Borders ─────────────────────────────────────────────────── */
+  --border:  rgba(255,255,255,.07);
+  --border2: rgba(255,255,255,.12);
+  --border3: rgba(255,255,255,.18);
+
+  /* ── Text ────────────────────────────────────────────────────── */
+  --text:  #f0f6ff;
+  --text2: #8ba3be;
+  --text3: #4d6478;
+  --text4: #2d4057;
+
+  /* ── Semantic colours ────────────────────────────────────────── */
+  --green:    #10b981; --green-g:  rgba(16,185,129,.12); --green-b:  rgba(16,185,129,.25);
+  --amber:    #f59e0b; --amber-g:  rgba(245,158,11,.10);
+  --red:      #ef4444; --red-g:    rgba(239,68,68,.10);
+  --info:     #3b82f6; --info-g:   rgba(59,130,246,.10);
+  --purple:   #8b5cf6; --purple-g: rgba(139,92,246,.10);
+  --teal:     #14b8a6; --teal-g:   rgba(20,184,166,.10);
+
+  /* ── Radius ──────────────────────────────────────────────────── */
+  --r:  14px;
+  --r2: 10px;
+  --r3: 20px;
+  --r4: 8px;
+
+  /* ── Shadows ─────────────────────────────────────────────────── */
+  --shadow:    0 8px 32px rgba(0,0,0,.55);
+  --shadow-sm: 0 2px 12px rgba(0,0,0,.35);
+
+  /* ── Motion ──────────────────────────────────────────────────── */
+  --transition: .18s cubic-bezier(.4,0,.2,1);
+
+  /* ── Layout ──────────────────────────────────────────────────── */
+  --sidebar-w:  250px;
+  --nav-h:      64px;
+  --container:  1180px;
+
+  /* ── Typography ──────────────────────────────────────────────── */
+  --font-sans:    'DM Sans', system-ui, sans-serif;
+  --font-display: 'Bebas Neue', system-ui, sans-serif;
+  --font-headline:'Instrument Serif', Georgia, serif;
+  --font-ui:      'DM Sans', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* ── LIGHT THEME ─────────────────────────────────────────────────────── */
+[data-theme="light"] {
+  --bg:       #f0f4f8;
+  --surface:  #ffffff;
+  --surface2: #f5f7fa;
+  --surface3: #e8edf2;
+  --surface4: #dde3ea;
+
+  --border:  rgba(0,0,0,.08);
+  --border2: rgba(0,0,0,.14);
+  --border3: rgba(0,0,0,.20);
+
+  --text:  #0d1b2a;
+  --text2: #4a5568;
+  --text3: #8898aa;
+  --text4: #a0aec0;
+
+  --primary-glow:   rgba(19,127,236,.14);
+  --primary-subtle: rgba(19,127,236,.08);
+  --primary-mid:    rgba(19,127,236,.14);
+
+  --green-g:  rgba(16,185,129,.10); --green-b:  rgba(16,185,129,.20);
+  --amber-g:  rgba(245,158,11,.08);
+  --red-g:    rgba(239,68,68,.08);
+  --info-g:   rgba(59,130,246,.08);
+  --purple-g: rgba(139,92,246,.08);
+  --teal-g:   rgba(20,184,166,.08);
+
+  --shadow:    0 4px 24px rgba(0,0,0,.12);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,.08);
+}

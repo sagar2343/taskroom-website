@@ -1,11 +1,81 @@
-User-agent: *
-Allow: /
+# ─────────────────────────────────────────────────────────────────
+#  robots.txt — TaskRoom (https://taskroom.in)
+#  Last updated: 2025-05-25
+# ─────────────────────────────────────────────────────────────────
 
+# ── All well-behaved crawlers ─────────────────────────────────────
+User-agent: *
+
+# Public, indexable pages
+Allow: /$
+Allow: /features$
+Allow: /features/
+Allow: /mobile-app$
+Allow: /mobile-app/
+Allow: /pricing$
+Allow: /pricing/
+Allow: /industries$
+Allow: /industries/
+
+# APK download page — let Google index the app download
+Allow: /download/
+
+# Static assets Google needs to render pages
+Allow: /assets/css/
+Allow: /assets/js/
+Allow: /assets/img/
+Allow: /app_icon.png
+Allow: /og-image.png
+Allow: /manifest.json
+
+# Block server-side / API routes — not indexable content
+Disallow: /api/
+Disallow: /api
+
+# Block SPA auth/session routes
+Disallow: /?login=
+Disallow: /?signup=
+
+# Block internal config artifacts
+Disallow: /.vscode/
+Disallow: /README.md
+
+# Crawl-delay hint (polite to smaller crawlers)
+Crawl-delay: 5
+
+# ── Googlebot specific ────────────────────────────────────────────
 User-agent: Googlebot
 Allow: /
-
-Sitemap: https://taskroom.in/sitemap.xml
-
-# Block dashboard and API routes from indexing
 Disallow: /api/
-Disallow: /#dashboard
+Crawl-delay: 0
+
+# ── Googlebot Image ───────────────────────────────────────────────
+User-agent: Googlebot-Image
+Allow: /assets/img/
+Allow: /app_icon.png
+Allow: /og-image.png
+
+# ── Bingbot ───────────────────────────────────────────────────────
+User-agent: Bingbot
+Allow: /
+Disallow: /api/
+Crawl-delay: 3
+
+# ── Block known scrapers / AI trainers ───────────────────────────
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+# ── Sitemap location ─────────────────────────────────────────────
+Sitemap: https://taskroom.in/sitemap.xml

@@ -1,0 +1,120 @@
+# TaskRoom — SEO & Indexing Setup Guide
+
+## Files in this package
+
+| File | Purpose |
+|------|---------|
+| `sitemap.xml` | XML sitemap with image extensions — submit to Google Search Console |
+| `robots.txt` | Crawler rules — allow public pages, block API/auth routes |
+| `.htaccess` | Apache: HTTPS redirect, clean URLs, caching, compression |
+| `404.html` | Custom not-found page (keeps crawl budget clean) |
+| `google-site-verification.html` | Placeholder for GSC HTML file verification |
+| `BingSiteAuth.xml` | Placeholder for Bing Webmaster verification |
+| `manifest.json` | PWA manifest for mobile install / app store signals |
+
+---
+
+## Step-by-step: get indexed in 48 hours
+
+### 1. Verify with Google Search Console
+1. Go to https://search.google.com/search-console
+2. Add property → URL prefix → `https://taskroom.in`
+3. Choose **HTML file** verification
+4. Rename `google-site-verification.html` to the filename Google provides (e.g. `googleabc123.html`)
+5. Upload to root
+6. Click Verify
+
+**Or** — paste the meta tag version into the `<head>` of all HTML files:
+```html
+<meta name="google-site-verification" content="YOUR_TOKEN_HERE">
+```
+Uncomment the placeholder line already in every `<head>`.
+
+### 2. Submit your sitemap
+1. In Search Console → Sitemaps
+2. Enter: `https://taskroom.in/sitemap.xml`
+3. Submit
+
+### 3. Request indexing for each page
+In Search Console → URL Inspection, paste each URL and click "Request indexing":
+- `https://taskroom.in/`
+- `https://taskroom.in/features`
+- `https://taskroom.in/pricing`
+- `https://taskroom.in/industries`
+- `https://taskroom.in/mobile-app`
+
+### 4. Verify Bing Webmaster
+1. Go to https://www.bing.com/webmasters
+2. Add site → XML file method
+3. Replace token in `BingSiteAuth.xml` and upload to root
+
+### 5. Upload og-image.png
+Create a 1200×630px screenshot of your dashboard and save as `og-image.png` in the root.
+This appears in Google, WhatsApp, and Twitter link previews.
+
+---
+
+## Hosting config notes
+
+### cPanel / Shared hosting
+Upload `.htaccess` to `public_html/`. It handles:
+- HTTP → HTTPS redirect (301)
+- www → non-www redirect (301)  
+- `/features` → `/features.html` clean URLs
+- Asset caching (1 year for CSS/JS, 1 week for HTML)
+- Gzip compression
+
+### Nginx (VPS)
+Add to your server block:
+```nginx
+# Clean URLs
+location / {
+  try_files $uri $uri.html $uri/ =404;
+}
+
+# HTTPS redirect
+server {
+  listen 80;
+  return 301 https://$host$request_uri;
+}
+
+# Cache headers
+location ~* \.(css|js|png|jpg|webp|woff2)$ {
+  expires 1y;
+  add_header Cache-Control "public, immutable";
+}
+```
+
+---
+
+## Schema markup summary
+
+| Page | Schema types |
+|------|-------------|
+| `index.html` | SoftwareApplication, Organization, WebSite, WebPage, FAQPage |
+| `features.html` | WebPage, ItemList |
+| `pricing.html` | WebPage, Product (with Offers) |
+| `industries.html` | WebPage, ItemList |
+| `mobile-app.html` | MobileApplication, WebPage |
+
+---
+
+## Keywords targeted per page
+
+| Page | Primary keyword |
+|------|----------------|
+| Home | field employee tracking software |
+| Features | proof of work app / GPS tracking features |
+| Pricing | field employee tracking software price |
+| Industries | construction workforce management / pharma field force |
+| Mobile App | field employee tracking app Android |
+
+---
+
+## Next steps to improve rankings
+
+1. **Create an og-image.png** — improves CTR from Google dramatically
+2. **Add Google Analytics** — paste GA4 tag in `<head>` of all pages
+3. **Write blog content** — target "how to track field employees" type queries
+4. **Get backlinks** — list on G2, Capterra, Product Hunt, IndiaMART
+5. **Add reviews** — the AggregateRating schema is live; encourage reviews

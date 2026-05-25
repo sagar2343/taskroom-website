@@ -1,0 +1,95 @@
+# ─────────────────────────────────────────────────────────────────
+#  .htaccess — TaskRoom (Apache / cPanel / shared hosting)
+#  Handles: canonical HTTPS, trailing-slash, clean URLs, caching
+# ─────────────────────────────────────────────────────────────────
+
+Options -Indexes
+Options +FollowSymLinks
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # ── Force HTTPS ───────────────────────────────────────────────
+  RewriteCond %{HTTPS} off
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+  # ── Remove www (canonical domain = taskroom.in, no www) ──────
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+
+  # ── Clean URLs: /features → /features.html (only if no file) ─
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME}.html -f
+  RewriteRule ^(.+?)/?$ $1.html [L]
+
+  # ── Remove trailing slash from pages (SEO canonical) ─────────
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} (.+)/$
+  RewriteRule ^ %1 [R=301,L]
+
+</IfModule>
+
+# ─── Cache-Control Headers (performance + crawl budget) ──────────
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # HTML — short cache so Google always gets fresh content
+  ExpiresByType text/html                  "access plus 1 hour"
+
+  # CSS / JS — long cache (use versioned filenames when updating)
+  ExpiresByType text/css                   "access plus 1 year"
+  ExpiresByType application/javascript     "access plus 1 year"
+  ExpiresByType text/javascript            "access plus 1 year"
+
+  # Images
+  ExpiresByType image/png                  "access plus 1 year"
+  ExpiresByType image/jpeg                 "access plus 1 year"
+  ExpiresByType image/webp                 "access plus 1 year"
+  ExpiresByType image/svg+xml              "access plus 1 year"
+  ExpiresByType image/x-icon              "access plus 1 year"
+
+  # Fonts
+  ExpiresByType font/woff2                 "access plus 1 year"
+  ExpiresByType font/woff                  "access plus 1 year"
+
+  # Video (promo)
+  ExpiresByType video/mp4                  "access plus 6 months"
+  ExpiresByType video/webm                 "access plus 6 months"
+
+  # Manifest & robots
+  ExpiresByType application/manifest+json  "access plus 1 week"
+  ExpiresByType text/plain                 "access plus 1 week"
+  ExpiresByType application/xml            "access plus 1 week"
+  ExpiresByType text/xml                   "access plus 1 week"
+</IfModule>
+
+# ─── Compression (reduces page size for faster crawl + LCP) ──────
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE text/javascript
+  AddOutputFilterByType DEFLATE application/json
+  AddOutputFilterByType DEFLATE application/ld+json
+  AddOutputFilterByType DEFLATE text/xml
+  AddOutputFilterByType DEFLATE application/xml
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ─── Security Headers (Google rewards secure sites) ──────────────
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options  "nosniff"
+  Header always set X-Frame-Options         "SAMEORIGIN"
+  Header always set Referrer-Policy         "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy      "geolocation=(), microphone=()"
+
+  # Add CORP for APK download
+  <FilesMatch "\.apk$">
+    Header set Content-Disposition "attachment"
+    Header set Content-Type "application/vnd.android.package-archive"
+  </FilesMatch>
+</IfModule>
+
+# ─── Custom 404 (keeps crawlers from burning budget on missing URLs)
+ErrorDocument 404 /404.html
