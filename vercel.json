@@ -5,13 +5,20 @@
     { "source": "/features",    "destination": "/features.html" },
     { "source": "/pricing",     "destination": "/pricing.html" },
     { "source": "/industries",  "destination": "/industries.html" },
-    { "source": "/mobile-app",  "destination": "/mobile-app.html" }
+    { "source": "/mobile-app",  "destination": "/mobile-app.html" },
+    { "source": "/privacy",    "destination": "/privacy.html" },
+    { "source": "/terms",      "destination": "/terms.html" }
   ],
   "redirects": [
     { "source": "/features/",   "destination": "/features",   "permanent": true },
     { "source": "/pricing/",    "destination": "/pricing",    "permanent": true },
     { "source": "/industries/", "destination": "/industries", "permanent": true },
-    { "source": "/mobile-app/", "destination": "/mobile-app", "permanent": true }
+    { "source": "/mobile-app/", "destination": "/mobile-app", "permanent": true },
+    { "source": "/privacy/",    "destination": "/privacy",    "permanent": true },
+    { "source": "/terms/",      "destination": "/terms",      "permanent": true },
+    { "source": "/privacy-policy", "destination": "/privacy", "permanent": true },
+    { "source": "/terms-and-conditions", "destination": "/terms", "permanent": true },
+    { "source": "/tnc",         "destination": "/terms",      "permanent": true }
   ],
   "headers": [
     {

@@ -4,11 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>TaskRoom Pricing — Affordable Field Employee Tracking Software Plans from ₹199/month</title>
-  <meta name="description" content="TaskRoom pricing starts at ₹199/month for up to 5 employees. Starter, Growth, Business and Enterprise plans. All plans include a 14-day free trial. No credit card required.">
-  <meta name="keywords" content="field employee tracking software price, workforce management software cost, GPS tracking app pricing India, employee attendance app price, affordable field force software, TaskRoom plans, field team software pricing">
+  <title>TaskRoom Pricing — Field Employee Tracking Software Plans from ₹199/month</title>
+  <meta name="description" content="TaskRoom pricing starts at ₹199/month. Starter, Growth, Business and Enterprise plans for field employee tracking. 14-day free trial. No credit card required.">
+  <meta name="keywords" content="field employee tracking software price, workforce management software cost, GPS tracking app pricing India, employee attendance app price, affordable field force software, TaskRoom plans">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-  <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large">
   <link rel="canonical" href="https://taskroom.in/pricing">
   <meta name="author" content="TaskRoom">
   <meta name="theme-color" content="#137fec">
@@ -17,7 +16,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://taskroom.in/pricing">
   <meta property="og:title" content="TaskRoom Pricing — From ₹199/month for Field Teams">
-  <meta property="og:description" content="Startup-friendly pricing for field employee tracking. Plans from ₹199/month. 14-day free trial on all paid plans. No credit card.">
+  <meta property="og:description" content="Startup-friendly pricing for field employee tracking. Plans from ₹199/month. 14-day free trial. No credit card.">
   <meta property="og:image" content="https://taskroom.in/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -34,7 +33,9 @@
   <meta name="HandheldFriendly" content="True">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <script type="application/ld+json">
+
+  <!-- Dynamic JSON-LD: injected by JS after API load — see injectPricingSchema() -->
+  <script id="pricing-schema" type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@graph": [
@@ -43,7 +44,7 @@
         "@id": "https://taskroom.in/pricing#webpage",
         "url": "https://taskroom.in/pricing",
         "name": "TaskRoom Pricing — Affordable Field Employee Tracking Plans",
-        "description": "Pricing plans for TaskRoom field employee tracking and workforce management software. From ₹199/month.",
+        "description": "Pricing plans for TaskRoom field employee tracking and workforce management software.",
         "inLanguage": "en-IN",
         "breadcrumb": {
           "@type": "BreadcrumbList",
@@ -52,240 +53,726 @@
             {"@type":"ListItem","position":2,"name":"Pricing","item":"https://taskroom.in/pricing"}
           ]
         }
-      },
-      {
-        "@type": "Product",
-        "name": "TaskRoom — Field Employee Tracking Software",
-        "description": "GPS-based field employee tracking and workforce management platform",
-        "brand": {"@type":"Brand","name":"TaskRoom"},
-        "url": "https://taskroom.in",
-        "image": "https://taskroom.in/og-image.png",
-        "offers": [
-          {
-            "@type": "Offer",
-            "name": "Starter Plan",
-            "description": "Basic field employee tracking for small teams — up to 5 employees, 2 rooms",
-            "price": "199",
-            "priceCurrency": "INR",
-            "availability": "https://schema.org/InStock",
-            "priceValidUntil": "2025-12-31",
-            "url": "https://taskroom.in/pricing",
-            "seller": {"@type":"Organization","name":"TaskRoom"}
-          },
-          {
-            "@type": "Offer",
-            "name": "Growth Plan",
-            "description": "Full GPS tracking and analytics — up to 25 employees, 10 rooms",
-            "price": "499",
-            "priceCurrency": "INR",
-            "availability": "https://schema.org/InStock",
-            "priceValidUntil": "2025-12-31",
-            "url": "https://taskroom.in/pricing",
-            "seller": {"@type":"Organization","name":"TaskRoom"}
-          },
-          {
-            "@type": "Offer",
-            "name": "Business Plan",
-            "description": "Advanced field force management — up to 75 employees, 30 rooms",
-            "price": "999",
-            "priceCurrency": "INR",
-            "availability": "https://schema.org/InStock",
-            "priceValidUntil": "2025-12-31",
-            "url": "https://taskroom.in/pricing",
-            "seller": {"@type":"Organization","name":"TaskRoom"}
-          }
-        ],
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "4.8",
-          "reviewCount": "47",
-          "bestRating": "5"
-        }
       }
     ]
   }
   </script>
 
-  <!-- ── CSS ─────────────────────────────────────────── -->
   <link rel="stylesheet" href="assets/css/tokens.css">
   <link rel="stylesheet" href="assets/css/base.css">
   <link rel="stylesheet" href="assets/css/landing.css">
   <link rel="stylesheet" href="assets/css/patch.css">
+
+  <style>
+
+    /* ── CONTAINER (failsafe — also defined in base.css) ────────── */
+    .container, .l-container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+    @media (max-width: 640px) {
+      .container, .l-container { padding: 0 16px; }
+    }
+
+    /* ── PAGE-SPECIFIC STYLES ──────────────────────────────────── */
+    .pricing-hero {
+      padding: 120px 0 56px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .pricing-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 52px 52px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
+    }
+    .pricing-hero-glow {
+      position: absolute;
+      top: -100px; left: 50%;
+      transform: translateX(-50%);
+      width: 700px; height: 500px;
+      background: radial-gradient(ellipse, rgba(19,127,236,.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .pricing-hero-inner { position: relative; z-index: 1; }
+
+    /* ── BILLING TOGGLE ──────────────────────────────────────────── */
+    .billing-toggle-wrap {
+      display: flex; align-items: center; justify-content: center;
+      gap: 14px; margin-top: 28px;
+    }
+    .billing-label {
+      font-size: 14px; font-weight: 500; color: var(--text2);
+      transition: color .2s;
+    }
+    .billing-label.active { color: var(--text); }
+    .toggle-pill {
+      position: relative; width: 48px; height: 26px;
+      background: var(--surface3); border: 1px solid var(--border2);
+      border-radius: 13px; cursor: pointer; transition: background .2s;
+    }
+    .toggle-pill.yearly { background: var(--primary); }
+    .toggle-pill::after {
+      content: ''; position: absolute;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #fff; top: 3px; left: 4px;
+      transition: transform .2s cubic-bezier(.34,1.56,.64,1);
+      box-shadow: 0 1px 4px rgba(0,0,0,.3);
+    }
+    .toggle-pill.yearly::after { transform: translateX(22px); }
+    .save-chip {
+      background: rgba(16,185,129,.15); border: 1px solid rgba(16,185,129,.3);
+      color: var(--green); font-size: 11px; font-weight: 700;
+      padding: 3px 8px; border-radius: 100px;
+      font-family: 'IBM Plex Mono', monospace; letter-spacing: .04em;
+    }
+
+    /* ── PLAN GRID ───────────────────────────────────────────────── */
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-top: 48px;
+    }
+    .plan-card {
+      background: var(--surface);
+      padding: 32px 26px 28px;
+      display: flex; flex-direction: column;
+      position: relative; transition: background .2s;
+    }
+    .plan-card:hover { background: var(--surface2); }
+    .plan-card.featured {
+      background: var(--surface2);
+      outline: 2px solid rgba(19,127,236,.45);
+      outline-offset: -1px;
+    }
+    .plan-card.featured:hover { background: var(--surface3); }
+    .plan-popular {
+      position: absolute; top: -13px; left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      color: #fff; font-size: 10px; font-weight: 700;
+      font-family: 'IBM Plex Mono', monospace;
+      padding: 3px 14px; border-radius: 100px; white-space: nowrap;
+    }
+    .plan-name {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .1em;
+      color: var(--text3); margin-bottom: 12px;
+    }
+    .plan-price {
+      font-size: 42px; font-weight: 800;
+      letter-spacing: -2px; line-height: 1;
+      color: var(--text); margin-bottom: 4px;
+    }
+    .plan-price sup { font-size: 20px; vertical-align: super; margin-right: 1px; }
+    .plan-period { font-size: 12px; color: var(--text3); margin-bottom: 4px; }
+    .plan-yearly-note {
+      font-size: 12px; color: var(--green);
+      font-family: 'IBM Plex Mono', monospace; margin-bottom: 6px;
+      min-height: 16px;
+    }
+    .plan-seats {
+      font-size: 12px; color: var(--primary-light);
+      font-family: 'IBM Plex Mono', monospace; margin-bottom: 20px;
+    }
+    .plan-divider {
+      border: none; border-top: 1px solid var(--border);
+      margin-bottom: 18px;
+    }
+    .plan-features {
+      list-style: none; display: flex; flex-direction: column;
+      gap: 9px; margin-bottom: 24px; flex: 1;
+    }
+    .plan-features li {
+      font-size: 13px; color: var(--text2);
+      display: flex; align-items: flex-start; gap: 8px;
+    }
+    .plan-features li::before {
+      content: '✓'; color: var(--primary-light);
+      font-weight: 700; flex-shrink: 0; margin-top: 1px;
+    }
+    .plan-features li.dim { color: var(--text3); }
+    .plan-features li.dim::before { content: '–'; color: var(--text3); }
+    .plan-cta {
+      display: block; text-align: center;
+      padding: 12px; border-radius: 8px;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+      font-family: 'Sora', sans-serif; text-decoration: none;
+      border: 1px solid var(--border2);
+      background: var(--surface3); color: var(--text);
+      margin-top: auto;
+    }
+    .plan-cta:hover { background: var(--surface4); border-color: var(--text3); }
+    .plan-cta.primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      border-color: transparent; color: #fff;
+    }
+    .plan-cta.primary:hover { box-shadow: 0 4px 20px rgba(19,127,236,.4); }
+    .plan-cta:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* ── LOADING SKELETON ────────────────────────────────────────── */
+    .skeleton-card {
+      background: var(--surface); padding: 32px 26px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .sk { border-radius: 6px; background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+    @keyframes shimmer { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+
+    /* ── TRUST STRIP ─────────────────────────────────────────────── */
+    .trust-strip {
+      display: flex; align-items: center; justify-content: center;
+      gap: 28px; flex-wrap: wrap;
+      margin-top: 36px; padding-top: 28px;
+      border-top: 1px solid var(--border);
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 13px; color: var(--text3);
+      font-family: 'IBM Plex Mono', monospace;
+    }
+    .trust-item svg { color: var(--primary); flex-shrink: 0; }
+
+    /* ── FAQ ─────────────────────────────────────────────────────── */
+    .faq-wrap {
+      max-width: 680px; margin: 56px auto 0;
+      display: flex; flex-direction: column; gap: 2px;
+    }
+    .faq-item { background: var(--surface); border: 1px solid var(--border); overflow: hidden; }
+    .faq-q {
+      width: 100%; text-align: left; background: none; border: none;
+      color: var(--text); padding: 18px 22px; font-size: 14px; font-weight: 500;
+      cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+      font-family: 'Sora', sans-serif; transition: background .15s;
+    }
+    .faq-q:hover { background: var(--surface2); }
+    .faq-arrow { transition: transform .2s; color: var(--text3); font-size: 16px; }
+    .faq-a {
+      padding: 0 22px; max-height: 0; overflow: hidden;
+      transition: all .3s; color: var(--text2); font-size: 13.5px; line-height: 1.75;
+    }
+    .faq-item.open .faq-a { padding: 0 22px 18px; max-height: 200px; }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+
+    /* ── ERROR STATE ─────────────────────────────────────────────── */
+    .plans-error {
+      grid-column: 1/-1; padding: 52px 24px; text-align: center;
+      color: var(--text3);
+    }
+    .plans-error h3 { font-size: 17px; font-weight: 700; color: var(--text2); margin-bottom: 8px; }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────── */
+    @media (max-width: 900px) { .plans-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) {
+      .plans-grid { grid-template-columns: 1fr; }
+      .pricing-hero { padding: 100px 0 40px; }
+    }
+
+    /* ── LIGHT THEME ─────────────────────────────────────────────── */
+    [data-theme="light"] .plan-card { background: #fff; }
+    [data-theme="light"] .plan-card:hover { background: #f8fafc; }
+    [data-theme="light"] .plan-card.featured { background: #f0f6ff; }
+    [data-theme="light"] .plans-grid { background: rgba(0,0,0,.07); border-color: rgba(0,0,0,.07); }
+    [data-theme="light"] .faq-item { background: #fff; border-color: rgba(0,0,0,.08); }
+    [data-theme="light"] .toggle-pill { background: var(--surface3); }
+    [data-theme="light"] .billing-label { color: #718096; }
+    [data-theme="light"] .billing-label.active { color: #0d1b2a; }
+  </style>
 </head>
+
 <body>
-<nav id="land-nav" role="navigation">
+
+<!-- NAV -->
+<nav id="land-nav" role="navigation" aria-label="Main navigation">
   <div class="land-nav-inner">
-    <a href="/" class="land-logo">
-      <div class="land-logo-icon"><img src="./app_icon.png" alt="TaskRoom" width="30" height="30" loading="eager"></div>
+    <a href="/" class="land-logo" aria-label="TaskRoom Home">
+      <div class="land-logo-icon">
+        <img src="app_icon.png" alt="TaskRoom" width="30" height="30" loading="eager">
+      </div>
       Task<span>Room</span>
     </a>
-    <ul class="land-nav-center">
+    <ul class="land-nav-center land-nav-links" role="list">
       <li><a href="/features">Features</a></li>
       <li><a href="/mobile-app">Mobile App</a></li>
       <li><a href="/industries">Industries</a></li>
       <li><a href="/pricing" class="active-link">Pricing</a></li>
-      <li><a href="/#l-faq">FAQ</a></li>
     </ul>
-    <div class="land-nav-right">
+    <div class="land-nav-right land-nav-cta">
       <button class="land-nav-sign-in" onclick="window.location='/?login=1'">Sign In</button>
       <button class="land-nav-cta-btn" onclick="window.location='/?signup=1'">Start Free →</button>
     </div>
-    <button class="land-hamburger" id="land-ham" onclick="togglePricMenu()"><span></span><span></span><span></span></button>
+    <button class="land-hamburger" id="land-ham" onclick="toggleNav()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
-<div class="land-mobile-menu" id="land-mob-menu-pric">
-  <a href="/features">✅ Features</a><a href="/mobile-app">📲 Mobile App</a><a href="/industries">🏭 Industries</a><a href="/pricing">💰 Pricing</a>
-  <button onclick="window.location='/?login=1'" style="text-align:left">Sign In</button>
-  <button onclick="window.location='/?signup=1'" style="color:var(--primary-light);font-weight:700;background:rgba(19,127,236,.08);text-align:left">Start Free →</button>
+<div class="land-mobile-menu" id="land-mob-menu">
+  <a href="/features" onclick="toggleNav()">✅ Features</a>
+  <a href="/mobile-app" onclick="toggleNav()">📲 Mobile App</a>
+  <a href="/industries" onclick="toggleNav()">🏭 Industries</a>
+  <a href="/pricing" onclick="toggleNav()">💰 Pricing</a>
+  <button onclick="window.location='/?login=1'">Sign In to Dashboard</button>
+  <button onclick="window.location='/?signup=1'" style="color:var(--primary-light);font-weight:700;background:rgba(19,127,236,.08)">Start Free →</button>
 </div>
 
-<div style="padding-top:64px;background:var(--bg)">
-  <section style="padding:72px 24px 52px;text-align:center;border-bottom:1px solid var(--border)">
-    <div style="max-width:640px;margin:0 auto">
-      <div class="l-section-label">Pricing</div>
-      <h1 style="font-family:'Instrument Serif',serif;font-size:clamp(36px,5vw,58px);font-weight:400;letter-spacing:-.02em;color:var(--text);margin-bottom:16px;line-height:1.1">
-        Startup-friendly pricing.<br><em style="font-style:italic;color:var(--primary-light)">Scale as you grow.</em>
-      </h1>
-      <p style="font-size:17px;color:var(--text2);font-weight:300;line-height:1.75">Plans for teams of 5 to 500+. Start free, upgrade when ready.</p>
-      <div id="pric-toggle" style="display:flex;align-items:center;gap:12px;justify-content:center;margin-top:24px;font-size:14px;color:var(--text2)">
-        <span>Monthly</span>
-        <label style="position:relative;width:44px;height:24px;cursor:pointer">
-          <input type="checkbox" id="pric-yearly" onchange="togglePricCycle(this.checked)" style="opacity:0;width:0;height:0">
-          <span style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:var(--surface3);border-radius:24px;transition:.3s;border:1px solid var(--border2)"></span>
-          <span id="pric-tog-dot" style="position:absolute;left:3px;bottom:3px;width:16px;height:16px;background:var(--text2);border-radius:50%;transition:.3s"></span>
-        </label>
-        <span>Yearly <span style="background:rgba(16,185,129,.15);color:var(--green);font-size:11px;font-weight:700;padding:2px 7px;border-radius:4px;font-family:'IBM Plex Mono',monospace">Save 16%</span></span>
+<!-- HERO -->
+<section class="pricing-hero">
+  <div class="pricing-hero-glow" aria-hidden="true"></div>
+  <div class="pricing-hero-inner container">
+    <p class="l-section-label" style="margin-bottom:14px">Pricing</p>
+    <h1 class="l-h2" style="font-size:clamp(32px,4.5vw,54px);margin-bottom:14px">
+      Startup-friendly pricing.<br>Scale as you grow.
+    </h1>
+    <p style="color:var(--text2);font-size:17px;font-weight:300;max-width:480px;margin:0 auto;line-height:1.7">
+      Start lean. All plans include a 14-day free trial. No credit card required.
+    </p>
+    <!-- Billing toggle -->
+    <div class="billing-toggle-wrap" id="billing-toggle-wrap">
+      <span class="billing-label active" id="lbl-monthly">Monthly</span>
+      <div class="toggle-pill" id="billing-toggle" onclick="toggleBilling()" role="switch" aria-checked="false" tabindex="0"></div>
+      <span class="billing-label" id="lbl-yearly">Yearly <span class="save-chip">Save 16%</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- PLANS GRID -->
+<section style="padding:0 0 80px">
+  <div class="container">
+    <div class="plans-grid" id="plans-grid" aria-live="polite" aria-label="Pricing plans">
+      <!-- Skeleton loading state -->
+      <div class="skeleton-card">
+        <div class="sk" style="height:12px;width:60px"></div>
+        <div class="sk" style="height:42px;width:100px"></div>
+        <div class="sk" style="height:12px;width:80px"></div>
+        <div class="sk" style="height:12px;width:120px"></div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+          <div class="sk" style="height:11px;width:90%"></div>
+          <div class="sk" style="height:11px;width:75%"></div>
+          <div class="sk" style="height:11px;width:85%"></div>
+          <div class="sk" style="height:11px;width:70%"></div>
+        </div>
+        <div class="sk" style="height:40px;border-radius:8px;margin-top:auto"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="sk" style="height:12px;width:60px"></div>
+        <div class="sk" style="height:42px;width:100px"></div>
+        <div class="sk" style="height:12px;width:80px"></div>
+        <div class="sk" style="height:12px;width:120px"></div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+          <div class="sk" style="height:11px;width:90%"></div>
+          <div class="sk" style="height:11px;width:75%"></div>
+          <div class="sk" style="height:11px;width:85%"></div>
+          <div class="sk" style="height:11px;width:70%"></div>
+        </div>
+        <div class="sk" style="height:40px;border-radius:8px;margin-top:auto"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="sk" style="height:12px;width:60px"></div>
+        <div class="sk" style="height:42px;width:100px"></div>
+        <div class="sk" style="height:12px;width:80px"></div>
+        <div class="sk" style="height:12px;width:120px"></div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+          <div class="sk" style="height:11px;width:90%"></div>
+          <div class="sk" style="height:11px;width:75%"></div>
+          <div class="sk" style="height:11px;width:85%"></div>
+          <div class="sk" style="height:11px;width:70%"></div>
+        </div>
+        <div class="sk" style="height:40px;border-radius:8px;margin-top:auto"></div>
+      </div>
+      <div class="skeleton-card">
+        <div class="sk" style="height:12px;width:60px"></div>
+        <div class="sk" style="height:42px;width:100px"></div>
+        <div class="sk" style="height:12px;width:80px"></div>
+        <div class="sk" style="height:12px;width:120px"></div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+          <div class="sk" style="height:11px;width:90%"></div>
+          <div class="sk" style="height:11px;width:75%"></div>
+          <div class="sk" style="height:11px;width:85%"></div>
+          <div class="sk" style="height:11px;width:70%"></div>
+        </div>
+        <div class="sk" style="height:40px;border-radius:8px;margin-top:auto"></div>
       </div>
     </div>
-  </section>
 
-  <!-- PLANS GRID (loaded from API) -->
-  <section style="padding:52px 24px;max-width:1180px;margin:0 auto">
-    <div id="pric-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-bottom:48px">
-      <div style="grid-column:1/-1;padding:44px;text-align:center;color:var(--text3)"><div style="width:24px;height:24px;border:2.5px solid var(--border2);border-top-color:var(--primary);border-radius:50%;animation:spin .65s linear infinite;margin:0 auto 12px"></div><div style="font-size:13px">Loading plans…</div></div>
+    <!-- Trust strip -->
+    <div class="trust-strip">
+      <div class="trust-item">
+        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm3.707 5.293-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L7 8.586l3.293-3.293a1 1 0 0 1 1.414 1.414z"/></svg>
+        14-day free trial
+      </div>
+      <div class="trust-item">
+        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm3.707 5.293-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L7 8.586l3.293-3.293a1 1 0 0 1 1.414 1.414z"/></svg>
+        No credit card needed
+      </div>
+      <div class="trust-item">
+        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm3.707 5.293-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L7 8.586l3.293-3.293a1 1 0 0 1 1.414 1.414z"/></svg>
+        Cancel anytime
+      </div>
+      <div class="trust-item">
+        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm3.707 5.293-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L7 8.586l3.293-3.293a1 1 0 0 1 1.414 1.414z"/></svg>
+        Setup in &lt; 30 minutes
+      </div>
+      <div class="trust-item">
+        <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm3.707 5.293-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L7 8.586l3.293-3.293a1 1 0 0 1 1.414 1.414z"/></svg>
+        Made in India 🇮🇳
+      </div>
     </div>
 
-    <!-- FAQ Pricing -->
-    <div style="max-width:700px;margin:0 auto">
-      <h2 style="font-size:22px;font-weight:700;margin-bottom:24px;color:var(--text);text-align:center">Pricing FAQ</h2>
-      <div style="display:flex;flex-direction:column;gap:2px">
-        <div class="l-faq-item"><button class="l-faq-q">Is there really a free trial?<span class="l-faq-arrow">▾</span></button><div class="l-faq-a">Yes — Growth and Business plans include a 14-day full-feature trial. No credit card required. Your team can be running in under 30 minutes.</div></div>
-        <div class="l-faq-item"><button class="l-faq-q">What happens after the trial?<span class="l-faq-arrow">▾</span></button><div class="l-faq-a">Your account automatically downgrades to the Starter plan. Your data is preserved. You'll just lose access to features above your plan tier.</div></div>
-        <div class="l-faq-item"><button class="l-faq-q">Can I change plans later?<span class="l-faq-arrow">▾</span></button><div class="l-faq-a">Yes. You can upgrade at any time from the Plans & Billing page in your dashboard. Your new plan takes effect immediately.</div></div>
-        <div class="l-faq-item"><button class="l-faq-q">How is billing handled?<span class="l-faq-arrow">▾</span></button><div class="l-faq-a">We use Razorpay for secure payment processing. Monthly or annual billing available. Annual plans save 16% vs monthly.</div></div>
-        <div class="l-faq-item"><button class="l-faq-q">Is the mobile app included in all plans?<span class="l-faq-arrow">▾</span></button><div class="l-faq-a">Yes. The TaskRoom mobile app (Android APK) is free for all employees on all plans. iOS coming soon.</div></div>
+    <!-- Pricing FAQ -->
+    <div style="text-align:center;margin-top:64px;margin-bottom:28px">
+      <p class="l-section-label">FAQ</p>
+      <h2 class="l-h2" style="font-size:clamp(26px,3vw,38px)">Pricing questions answered</h2>
+    </div>
+    <div class="faq-wrap" id="pricing-faq">
+      <div class="faq-item">
+        <button class="faq-q">What happens after the 14-day trial?<span class="faq-arrow">▾</span></button>
+        <div class="faq-a">Your account automatically moves to the Starter plan. All your data is preserved. You only lose access to features above the Starter tier — GPS tracking, analytics, etc. You can upgrade at any time.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Can I change my plan later?<span class="faq-arrow">▾</span></button>
+        <div class="faq-a">Yes. You can upgrade at any time from your dashboard under Plans & Billing. Downgrading takes effect at the end of your current billing period.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">How does the per-employee count work?<span class="faq-arrow">▾</span></button>
+        <div class="faq-a">Each plan has a maximum employee count. Managers don't count against the employee limit. If you need more employees than your plan allows, you'll be prompted to upgrade when you reach the limit.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Do I need a credit card to start the trial?<span class="faq-arrow">▾</span></button>
+        <div class="faq-a">No credit card required to start. Just create your organization and you get 14 days of the Growth plan free. You only enter payment details when you decide to upgrade.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">What payment methods do you accept?<span class="faq-arrow">▾</span></button>
+        <div class="faq-a">We accept all major Indian payment methods through Razorpay — UPI, credit/debit cards (Visa, Mastercard, RuPay), net banking, and wallets.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Is GST included in the pricing?<span class="faq-arrow">▾</span></button>
+        <div class="faq-a">The prices shown are exclusive of GST. 18% GST will be added at checkout as per Indian tax regulations. A GST invoice will be provided for all paid plans.</div>
       </div>
     </div>
 
     <!-- CTA -->
-    <div style="text-align:center;margin-top:56px;padding:52px 24px;background:var(--surface2);border-radius:16px;border:1px solid var(--border)">
-      <h2 style="font-family:'Instrument Serif',serif;font-size:clamp(26px,3.5vw,40px);font-weight:400;margin-bottom:12px;color:var(--text)">Start free today — no credit card</h2>
-      <p style="color:var(--text2);font-size:15px;max-width:400px;margin:0 auto 24px;font-weight:300">Full Growth features for 14 days. Your team running in 30 minutes.</p>
-      <button onclick="window.location='/?signup=1'" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--primary),var(--primary-light));border:none;color:#fff;padding:14px 32px;font-size:15px;font-weight:600;border-radius:8px;cursor:pointer;box-shadow:0 4px 20px rgba(19,127,236,.3)">Create Free Account →</button>
-      <div style="margin-top:14px;font-size:12px;color:var(--text3);font-family:'IBM Plex Mono',monospace">Questions? <a href="mailto:support@taskroom.in" style="color:var(--primary-light);text-decoration:none">support@taskroom.in</a> · <a href="tel:+919987603256" style="color:var(--primary-light);text-decoration:none">+91 99876 03256</a></div>
-    </div>
-  </section>
-
-  <footer style="border-top:1px solid var(--border);padding:28px 24px;max-width:1180px;margin:0 auto">
-    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px">
-      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:var(--text)">Task<span style="color:var(--primary-light)">Room</span> <span style="font-size:12px;font-weight:400;color:var(--text3)">© 2025 · Made in India 🇮🇳</span></div>
-      <div style="display:flex;gap:18px;flex-wrap:wrap">
-        <a href="/" style="color:var(--text3);font-size:13px;text-decoration:none">Home</a>
-        <a href="/features" style="color:var(--text3);font-size:13px;text-decoration:none">Features</a>
-        <a href="/pricing" style="color:var(--primary-light);font-size:13px;text-decoration:none">Pricing</a>
-        <a href="/mobile-app" style="color:var(--text3);font-size:13px;text-decoration:none">Mobile App</a>
+    <div style="text-align:center;margin-top:64px;padding:40px 20px;background:var(--surface);border:1px solid var(--border);border-radius:16px">
+      <h3 style="font-size:24px;font-weight:700;margin-bottom:10px;letter-spacing:-.03em">Still have questions?</h3>
+      <p style="color:var(--text2);font-size:14.5px;margin-bottom:24px;line-height:1.7">Talk to us. We reply within 2 hours on working days.</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <a href="mailto:support@taskroom.in" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;padding:12px 22px;border-radius:8px;font-weight:600;font-size:14px;text-decoration:none">✉️ Email us</a>
+        <a href="tel:+919987603256" style="display:inline-flex;align-items:center;gap:7px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);padding:12px 22px;border-radius:8px;font-weight:600;font-size:14px;text-decoration:none">📞 Call us</a>
       </div>
     </div>
-  </footer>
-</div>
+  </div>
+</section>
 
-<style>
-:root{--nav-h:64px}
-nav#land-nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(8,13,18,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06)}
-[data-theme="light"] nav#land-nav{background:rgba(255,255,255,.93);border-bottom-color:rgba(0,0,0,.08)}
-@keyframes spin{to{transform:rotate(360deg)}}
-.plan-card-pric{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px;display:flex;flex-direction:column;transition:border-color .2s}
-.plan-card-pric.featured{border-color:rgba(19,127,236,.4);background:linear-gradient(160deg,var(--surface),rgba(19,127,236,.05));position:relative}
-.plan-cta-pric{display:block;width:100%;text-align:center;padding:11px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;margin-top:auto;font-family:'Sora',sans-serif;text-decoration:none}
-.plan-cta-pric.primary{background:linear-gradient(135deg,var(--primary),var(--primary-light));border:none;color:#fff}
-.plan-cta-pric.ghost{background:var(--surface2);border:1px solid var(--border2);color:var(--text)}
-.plan-cta-pric.ghost:hover{background:var(--surface3)}
-@media(max-width:640px){nav .land-nav-center{display:none}nav .land-nav-right .land-nav-sign-in{display:none}.land-hamburger{display:flex}}
-</style>
+<!-- FOOTER -->
+<footer id="land-footer" role="contentinfo">
+  <div class="container">
+    <div class="l-footer-grid">
+      <div class="l-footer-brand">
+        <div class="l-footer-logo">Task<span>Room</span></div>
+        <p class="l-footer-tagline">Field workforce management built for modern teams.</p>
+        <address class="l-footer-contact">
+          <a href="tel:+919987603256" class="l-footer-contact-item">📞 +91 99876 03256</a>
+          <a href="mailto:support@taskroom.in" class="l-footer-contact-item">✉️ support@taskroom.in</a>
+        </address>
+      </div>
+      <nav class="l-footer-col">
+        <div class="l-footer-col-title">Product</div>
+        <a href="/features">Features</a>
+        <a href="/mobile-app">Mobile App</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/industries">Industries</a>
+      </nav>
+      <nav class="l-footer-col">
+        <div class="l-footer-col-title">Legal</div>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms &amp; Conditions</a>
+      </nav>
+      <nav class="l-footer-col">
+        <div class="l-footer-col-title">Account</div>
+        <a href="/?login=1">Sign In</a>
+        <a href="/?signup=1">Create Account</a>
+        <a href="mailto:support@taskroom.in">Support</a>
+      </nav>
+    </div>
+    <div class="l-footer-bottom">
+      <p class="l-footer-copy">© 2025 TaskRoom. Made in India 🇮🇳</p>
+      <div class="l-footer-bottom-right">
+        <a href="/privacy" style="color:var(--text3);font-size:12px;text-decoration:none">Privacy</a>
+        <span style="color:var(--text4)">·</span>
+        <a href="/terms" style="color:var(--text3);font-size:12px;text-decoration:none">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<button class="theme-toggle" id="theme-toggle-btn" onclick="toggleTheme()" aria-label="Toggle theme">🌙</button>
 
 <script>
-const BASE_PRIC='https://api.taskroom.in/api';
-let _pricYearly=false;
-let _pricPlans=[];
+/* ══════════════════════════════════════════════════════
+   PRICING PAGE — DYNAMIC PLAN LOADER
+══════════════════════════════════════════════════════ */
+const API = 'https://api.taskroom.in/api';
+let _plans = [];
+let _yearly = false;
 
-function togglePricMenu(){document.getElementById('land-ham').classList.toggle('open');document.getElementById('land-mob-menu-pric').classList.toggle('open');}
-window.addEventListener('scroll',()=>{const n=document.querySelector('nav#land-nav');if(n)n.style.boxShadow=window.scrollY>40?'0 2px 20px rgba(0,0,0,.4)':'none';},{passive:true});
-
-function togglePricCycle(yearly){
-  _pricYearly=yearly;
-  const dot=document.getElementById('pric-tog-dot');
-  if(dot){dot.style.transform=yearly?'translateX(20px)':'translateX(0)';dot.style.background=yearly?'#fff':'var(--text2)';}
-  const slider=document.querySelector('#pric-yearly+span');
-  if(slider)slider.style.background=yearly?'var(--primary)':'var(--surface3)';
-  if(_pricPlans.length)renderPricPlans(_pricPlans,yearly);
+/* ── Theme ─────────────────────────────────────────── */
+function initTheme() {
+  const t = localStorage.getItem('taskroom_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+  const btn = document.getElementById('theme-toggle-btn');
+  if (btn) btn.textContent = t === 'light' ? '🌙' : '☀️';
+}
+function toggleTheme() {
+  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('taskroom_theme', next);
+  const btn = document.getElementById('theme-toggle-btn');
+  if (btn) btn.textContent = next === 'light' ? '🌙' : '☀️';
 }
 
-function renderPricPlans(plans,yearly){
-  const grid=document.getElementById('pric-grid');
-  if(!grid)return;
-  const lv=v=>(v===-1||v===99999)?'∞':v;
-  grid.innerHTML=plans.map(p=>{
-    const isFeatured=p.slug==='growth';
-    const isEnt=!!p.isContactSales;
-    const mo=p.monthlyPrice||0;
-    const yr=p.yearlyPrice||0;
-    const display=yearly&&yr?Math.round(yr/12):mo;
-    const saving=mo>0?Math.round(mo*12-yr):0;
-    let priceBlock;
-    if(isEnt){
-      priceBlock=`<div style="font-size:32px;font-weight:800;letter-spacing:-1.5px;color:var(--text);margin:8px 0 4px">Custom</div><div style="font-size:12px;color:var(--text3)">Contact for pricing</div><div style="height:18px"></div>`;
-    }else if(mo===0){
-      priceBlock=`<div style="font-size:36px;font-weight:800;letter-spacing:-1.5px;color:var(--text);margin:8px 0 4px">Free</div><div style="font-size:12px;color:var(--text3)">forever</div><div style="height:18px"></div>`;
-    }else{
-      priceBlock=`<div style="font-size:36px;font-weight:800;letter-spacing:-1.5px;color:var(--text);margin:8px 0 4px"><sup style="font-size:16px;vertical-align:super">₹</sup>${display.toLocaleString('en-IN')}</div><div style="font-size:12px;color:var(--text3)">${yearly?'per month · billed annually':'per month'}</div><div style="font-size:12px;color:var(--green);font-family:'IBM Plex Mono',monospace;min-height:18px">${yearly&&saving>0?`Save ₹${saving.toLocaleString('en-IN')}/year`:''}</div>`;
-    }
-    const limStr=isEnt?'Unlimited employees & rooms':`Up to ${lv(p.maxEmployees)} emp · ${lv(p.maxRooms)} rooms · ${lv(p.maxManagers??1)} mgr`;
-    const feats=(p.featureLabels||[]).slice(0,6).map(f=>`<li style="display:flex;gap:8px;font-size:13px;color:var(--text2)"><span style="color:var(--primary-light);flex-shrink:0">✓</span>${f}</li>`).join('');
-    let cta;
-    if(isEnt)cta=`<a href="mailto:hello@taskroom.in" class="plan-cta-pric ghost">Contact Sales →</a>`;
-    else if(isFeatured)cta=`<button class="plan-cta-pric primary" onclick="window.location='/?signup=1&plan=${p.slug}'">Start 14-day trial →</button>`;
-    else cta=`<button class="plan-cta-pric ghost" onclick="window.location='/?signup=1&plan=${p.slug}'">Get started →</button>`;
-    return`<div class="plan-card-pric ${isFeatured?'featured':''}">
-      ${isFeatured?'<div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--primary),var(--primary-light));color:#fff;font-size:10px;font-weight:700;padding:3px 12px;border-radius:99px;white-space:nowrap">MOST POPULAR</div>':''}
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;font-family:'IBM Plex Mono',monospace;color:${isFeatured?'var(--primary-light)':'var(--text3)'};margin-top:${isFeatured?'14px':'0'}">${p.label||p.slug}</div>
-      ${priceBlock}
-      <div style="font-size:11.5px;color:var(--primary-light);font-family:'IBM Plex Mono',monospace;margin-bottom:14px">${limStr}</div>
-      <hr style="border:none;border-top:1px solid var(--border);margin-bottom:14px">
-      <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;flex:1">${feats}</ul>
-      ${cta}
-    </div>`;
-  }).join('');
-  // init FAQ accordions
-  document.querySelectorAll('.l-faq-q').forEach(b=>{b.addEventListener('click',function(){const i=this.closest('.l-faq-item');const o=i.classList.contains('open');document.querySelectorAll('.l-faq-item').forEach(x=>x.classList.remove('open'));if(!o)i.classList.add('open');});});
+/* ── Nav ────────────────────────────────────────────── */
+function toggleNav() {
+  const ham = document.getElementById('land-ham');
+  const menu = document.getElementById('land-mob-menu');
+  ham?.classList.toggle('open');
+  menu?.classList.toggle('open');
 }
 
-async function loadPricPlans(){
-  try{
-    const r=await fetch(BASE_PRIC+'/billing/plans');
-    const d=await r.json();
-    if(!d.success||!d.data?.length)throw new Error('No plans');
-    _pricPlans=d.data;
-    renderPricPlans(_pricPlans,_pricYearly);
-  }catch(e){
-    const grid=document.getElementById('pric-grid');
-    if(grid)grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--text3)">Failed to load pricing. <a href="mailto:support@taskroom.in" style="color:var(--primary-light)">Contact us</a> for current prices.</div>`;
+/* ── Billing toggle ─────────────────────────────────── */
+function toggleBilling() {
+  _yearly = !_yearly;
+  const pill = document.getElementById('billing-toggle');
+  const lm = document.getElementById('lbl-monthly');
+  const ly = document.getElementById('lbl-yearly');
+  pill.classList.toggle('yearly', _yearly);
+  pill.setAttribute('aria-checked', _yearly);
+  lm.classList.toggle('active', !_yearly);
+  ly.classList.toggle('active', _yearly);
+  if (_plans.length) renderPlans(_plans);
+}
+
+/* ── Helpers ─────────────────────────────────────────── */
+function esc(s) {
+  const d = document.createElement('div');
+  d.appendChild(document.createTextNode(s || ''));
+  return d.innerHTML;
+}
+function fmtINR(n) { return '₹' + (n || 0).toLocaleString('en-IN'); }
+function lv(v) { return (v === -1 || v === 99999) ? 'Unlimited' : v; }
+
+/* ── Fetch plans from API ───────────────────────────── */
+async function loadPlans() {
+  try {
+    const res = await fetch(API + '/billing/plans', {
+      headers: { 'Content-Type': 'application/json' }
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    if (!data.success || !data.data?.length) throw new Error('No plans returned');
+    _plans = data.data;
+    renderPlans(_plans);
+    injectPricingSchema(_plans);
+  } catch (err) {
+    console.error('[loadPlans]', err);
+    showPlansError();
   }
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
-  loadPricPlans();
-  document.querySelectorAll('.l-faq-q').forEach(b=>{b.addEventListener('click',function(){const i=this.closest('.l-faq-item');const o=i.classList.contains('open');document.querySelectorAll('.l-faq-item').forEach(x=>x.classList.remove('open'));if(!o)i.classList.add('open');});});
+/* ── Render plan cards ──────────────────────────────── */
+function renderPlans(plans) {
+  const grid = document.getElementById('plans-grid');
+  if (!grid) return;
+
+  grid.innerHTML = plans.map(p => {
+    const slug = p.slug || '';
+    const isFeatured = slug === 'growth';
+    const isEnterprise = !!p.isContactSales;
+    const monthly = p.monthlyPrice || 0;
+    const yearly = p.yearlyPrice || 0;
+    const annualSaving = Math.round(monthly * 12 - yearly);
+
+    // Price block
+    let priceHtml;
+    if (isEnterprise) {
+      priceHtml = `
+        <div class="plan-price" style="font-size:26px;margin-top:4px">Custom</div>
+        <div class="plan-period">Contact us for pricing</div>
+        <div class="plan-yearly-note"></div>`;
+    } else if (_yearly && yearly > 0) {
+      const perMo = Math.round(yearly / 12);
+      priceHtml = `
+        <div class="plan-price"><sup>₹</sup>${perMo.toLocaleString('en-IN')}</div>
+        <div class="plan-period">per month · billed ${fmtINR(yearly)}/year</div>
+        <div class="plan-yearly-note">Save ${fmtINR(annualSaving)} vs monthly</div>`;
+    } else {
+      priceHtml = `
+        <div class="plan-price"><sup>₹</sup>${monthly.toLocaleString('en-IN')}</div>
+        <div class="plan-period">per month</div>
+        <div class="plan-yearly-note">${yearly > 0 ? fmtINR(yearly) + '/year if billed annually' : ''}</div>`;
+    }
+
+    // Limits
+    const me = lv(p.maxEmployees ?? 5);
+    const mm = lv(p.maxManagers ?? 1);
+    const mr = lv(p.maxRooms ?? 2);
+    const limitsLine = isEnterprise
+      ? 'Unlimited employees · rooms · managers'
+      : `Up to ${me} employees · ${mr} rooms · ${mm} manager${p.maxManagers !== 1 ? 's' : ''}`;
+
+    // Features
+    const prevPlan = plans[plans.indexOf(p) - 1];
+    const featureLabels = p.featureLabels || [];
+    const allFeatures = [
+      ...(prevPlan && !isEnterprise ? [`Everything in ${prevPlan.label}`] : []),
+      ...featureLabels
+    ].slice(0, 7);
+    const featuresHtml = allFeatures.map(f => `<li>${esc(f)}</li>`).join('');
+
+    // CTA
+    let ctaHtml;
+    const targetUrl = '/?signup=1&plan=' + encodeURIComponent(slug);
+    if (isEnterprise) {
+      ctaHtml = `<a href="mailto:support@taskroom.in?subject=Enterprise%20Inquiry" class="plan-cta">Talk to sales →</a>`;
+    } else if (isFeatured) {
+      ctaHtml = `<a href="${targetUrl}" class="plan-cta primary">Start 14-day trial →</a>`;
+    } else {
+      ctaHtml = `<a href="${targetUrl}" class="plan-cta">Get started →</a>`;
+    }
+
+    return `
+      <div class="plan-card ${isFeatured ? 'featured' : ''}" data-plan="${esc(slug)}">
+        ${isFeatured ? '<div class="plan-popular">MOST POPULAR</div>' : ''}
+        <div class="plan-name">${esc(p.label)}</div>
+        ${priceHtml}
+        <div class="plan-seats">${esc(limitsLine)}</div>
+        <hr class="plan-divider">
+        <ul class="plan-features">${featuresHtml}</ul>
+        ${ctaHtml}
+      </div>`;
+  }).join('');
+}
+
+/* ── Error state ─────────────────────────────────────── */
+function showPlansError() {
+  const grid = document.getElementById('plans-grid');
+  if (!grid) return;
+  grid.innerHTML = `
+    <div class="plans-error">
+      <div style="font-size:40px;margin-bottom:14px">😕</div>
+      <h3>Couldn't load pricing right now</h3>
+      <p style="font-size:13.5px;margin-bottom:18px">Please try again or contact us directly.</p>
+      <button onclick="loadPlans()" style="background:var(--primary);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Sora',sans-serif">Try again</button>
+      <div style="margin-top:14px;font-size:13px;color:var(--text3)">
+        Or email us: <a href="mailto:support@taskroom.in" style="color:var(--primary-light)">support@taskroom.in</a>
+      </div>
+    </div>`;
+}
+
+/* ── Inject dynamic JSON-LD schema after API load ────── */
+function injectPricingSchema(plans) {
+  const validUntil = new Date();
+  validUntil.setFullYear(validUntil.getFullYear() + 1);
+  const validUntilStr = validUntil.toISOString().slice(0, 10);
+
+  const returnPolicy = {
+    "@type": "MerchantReturnPolicy",
+    "applicableCountry": "IN",
+    "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
+    "name": "SaaS Subscription — No Returns",
+    "description": "TaskRoom is a SaaS subscription. Subscriptions are non-refundable. Cancel anytime to stop future billing."
+  };
+
+  const offers = plans
+    .filter(p => !p.isContactSales && p.monthlyPrice > 0)
+    .map(p => ({
+      "@type": "Offer",
+      "name": p.label + " Plan",
+      "description": (p.featureLabels || []).slice(0, 3).join(', '),
+      "price": String(p.monthlyPrice),
+      "priceCurrency": "INR",
+      "availability": "https://schema.org/InStock",
+      "priceValidUntil": validUntilStr,
+      "url": "https://taskroom.in/pricing",
+      "seller": { "@type": "Organization", "name": "TaskRoom" },
+      "hasMerchantReturnPolicy": returnPolicy
+    }));
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://taskroom.in/pricing#webpage",
+        "url": "https://taskroom.in/pricing",
+        "name": "TaskRoom Pricing — Affordable Field Employee Tracking Plans",
+        "description": "Pricing plans for TaskRoom field employee tracking and workforce management software.",
+        "inLanguage": "en-IN",
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://taskroom.in" },
+            { "@type": "ListItem", "position": 2, "name": "Pricing", "item": "https://taskroom.in/pricing" }
+          ]
+        }
+      },
+      {
+        "@type": "Product",
+        "name": "TaskRoom — Field Employee Tracking Software",
+        "description": "GPS-based field employee tracking and workforce management platform",
+        "brand": { "@type": "Brand", "name": "TaskRoom", "url": "https://taskroom.in" },
+        "url": "https://taskroom.in",
+        "image": "https://taskroom.in/og-image.png",
+        "offers": offers,
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.8",
+          "reviewCount": "47",
+          "bestRating": "5",
+          "worstRating": "1"
+        }
+      }
+    ]
+  };
+
+  const el = document.getElementById('pricing-schema');
+  if (el) el.textContent = JSON.stringify(schema, null, 2);
+}
+
+/* ── FAQ accordion ───────────────────────────────────── */
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', function () {
+    const item = this.closest('.faq-item');
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+    this.setAttribute('aria-expanded', (!wasOpen).toString());
+  });
 });
+
+/* ── Keyboard: toggle billing on Space/Enter ────────── */
+document.getElementById('billing-toggle')?.addEventListener('keydown', e => {
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggleBilling(); }
+});
+
+/* ── Init ────────────────────────────────────────────── */
+initTheme();
+loadPlans();
 </script>
+
 </body>
 </html>

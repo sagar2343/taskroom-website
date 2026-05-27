@@ -77,6 +77,30 @@
     </image:image>
   </url>
 
+  <url>
+      <loc>https://taskroom.in/privacy</loc>
+      <lastmod>2026-05-27</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.4</priority>
+      <image:image>
+        <image:loc>https://taskroom.in/og-image.png</image:loc>
+        <image:title>Privacy Policy — TaskRoom</image:title>
+        <image:caption>TaskRoom privacy policy covering GPS data, employee data protection, and user rights</image:caption>
+      </image:image>
+    </url>
+  
+    <url>
+      <loc>https://taskroom.in/terms</loc>
+      <lastmod>2026-05-27</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.4</priority>
+      <image:image>
+        <image:loc>https://taskroom.in/og-image.png</image:loc>
+        <image:title>Terms &amp; Conditions — TaskRoom</image:title>
+        <image:caption>TaskRoom terms and conditions for field employee tracking software usage</image:caption>
+      </image:image>
+    </url>
+
   <!-- ═══════════════════════════════════════════════
        DEEP-LINK ANCHORS — help Googlebot find section content
   ═══════════════════════════════════════════════ -->
