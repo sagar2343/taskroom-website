@@ -102,9 +102,75 @@
           "Room-based team structure"
         ],
         "offers": [
-          {"@type":"Offer","name":"Starter","price":"199","priceCurrency":"INR","description":"Up to 5 employees, 2 rooms","priceSpecification":{"@type":"UnitPriceSpecification","billingDuration":"P1M"}},
-          {"@type":"Offer","name":"Growth","price":"499","priceCurrency":"INR","description":"Up to 25 employees, 10 rooms, live GPS","priceSpecification":{"@type":"UnitPriceSpecification","billingDuration":"P1M"}},
-          {"@type":"Offer","name":"Business","price":"999","priceCurrency":"INR","description":"Up to 75 employees, 30 rooms, advanced analytics","priceSpecification":{"@type":"UnitPriceSpecification","billingDuration":"P1M"}}
+          {
+            "@type":"Offer","name":"Starter","price":"199","priceCurrency":"INR",
+            "description":"Up to 5 employees, 2 rooms",
+            "availability":"https://schema.org/InStock","url":"https://taskroom.in/pricing",
+            "priceSpecification":{"@type":"UnitPriceSpecification","billingDuration":"P1M"},
+            "shippingDetails": {
+              "@type": "OfferShippingDetails",
+              "shippingRate": {"@type":"MonetaryAmount","value":"0","currency":"INR"},
+              "shippingDestination": {"@type":"DefinedRegion","addressCountry":"IN"},
+              "deliveryTime": {
+                "@type": "ShippingDeliveryTime",
+                "handlingTime": {"@type":"QuantitativeValue","minValue":0,"maxValue":0,"unitCode":"DAY"},
+                "transitTime":  {"@type":"QuantitativeValue","minValue":0,"maxValue":0,"unitCode":"DAY"}
+              }
+            },
+            "hasMerchantReturnPolicy": {
+              "@type": "MerchantReturnPolicy",
+              "applicableCountry": "IN",
+              "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
+              "name": "SaaS Subscription — No Returns",
+              "description": "TaskRoom is a SaaS subscription service. Subscriptions are non-refundable. Cancel anytime to stop future billing. A 14-day free trial is available on Growth and Business plans."
+            }
+          },
+          {
+            "@type":"Offer","name":"Growth","price":"499","priceCurrency":"INR",
+            "description":"Up to 25 employees, 10 rooms, live GPS",
+            "availability":"https://schema.org/InStock","url":"https://taskroom.in/pricing",
+            "priceSpecification":{"@type":"UnitPriceSpecification","billingDuration":"P1M"},
+            "shippingDetails": {
+              "@type": "OfferShippingDetails",
+              "shippingRate": {"@type":"MonetaryAmount","value":"0","currency":"INR"},
+              "shippingDestination": {"@type":"DefinedRegion","addressCountry":"IN"},
+              "deliveryTime": {
+                "@type": "ShippingDeliveryTime",
+                "handlingTime": {"@type":"QuantitativeValue","minValue":0,"maxValue":0,"unitCode":"DAY"},
+                "transitTime":  {"@type":"QuantitativeValue","minValue":0,"maxValue":0,"unitCode":"DAY"}
+              }
+            },
+            "hasMerchantReturnPolicy": {
+              "@type": "MerchantReturnPolicy",
+              "applicableCountry": "IN",
+              "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
+              "name": "SaaS Subscription — No Returns",
+              "description": "TaskRoom is a SaaS subscription service. Subscriptions are non-refundable. Cancel anytime to stop future billing. A 14-day free trial is available on Growth and Business plans."
+            }
+          },
+          {
+            "@type":"Offer","name":"Business","price":"999","priceCurrency":"INR",
+            "description":"Up to 75 employees, 30 rooms, advanced analytics",
+            "availability":"https://schema.org/InStock","url":"https://taskroom.in/pricing",
+            "priceSpecification":{"@type":"UnitPriceSpecification","billingDuration":"P1M"},
+            "shippingDetails": {
+              "@type": "OfferShippingDetails",
+              "shippingRate": {"@type":"MonetaryAmount","value":"0","currency":"INR"},
+              "shippingDestination": {"@type":"DefinedRegion","addressCountry":"IN"},
+              "deliveryTime": {
+                "@type": "ShippingDeliveryTime",
+                "handlingTime": {"@type":"QuantitativeValue","minValue":0,"maxValue":0,"unitCode":"DAY"},
+                "transitTime":  {"@type":"QuantitativeValue","minValue":0,"maxValue":0,"unitCode":"DAY"}
+              }
+            },
+            "hasMerchantReturnPolicy": {
+              "@type": "MerchantReturnPolicy",
+              "applicableCountry": "IN",
+              "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
+              "name": "SaaS Subscription — No Returns",
+              "description": "TaskRoom is a SaaS subscription service. Subscriptions are non-refundable. Cancel anytime to stop future billing. A 14-day free trial is available on Growth and Business plans."
+            }
+          }
         ],
         "aggregateRating": {
           "@type": "AggregateRating",
@@ -198,9 +264,66 @@
         "url":"https://taskroom.in",
         "downloadUrl":"https://taskroom.in/download/TaskRoom_v1.apk",
         "offers":[
-          {"@type":"Offer","name":"Starter","price":"199","priceCurrency":"INR","priceSpecification":{"@type":"UnitPriceSpecification","billingDuration":"P1M"}},
-          {"@type":"Offer","name":"Growth","price":"499","priceCurrency":"INR","priceSpecification":{"@type":"UnitPriceSpecification","billingDuration":"P1M"}},
-          {"@type":"Offer","name":"Business","price":"999","priceCurrency":"INR","priceSpecification":{"@type":"UnitPriceSpecification","billingDuration":"P1M"}}
+          {"@type":"Offer","name":"Starter","price":"199","priceCurrency":"INR",
+           "availability":"https://schema.org/InStock","url":"https://taskroom.in/pricing",
+           "priceSpecification":{"@type":"UnitPriceSpecification","billingDuration":"P1M"},
+           "shippingDetails": {
+              "@type": "OfferShippingDetails",
+              "shippingRate": {"@type":"MonetaryAmount","value":"0","currency":"INR"},
+              "shippingDestination": {"@type":"DefinedRegion","addressCountry":"IN"},
+              "deliveryTime": {
+                "@type": "ShippingDeliveryTime",
+                "handlingTime": {"@type":"QuantitativeValue","minValue":0,"maxValue":0,"unitCode":"DAY"},
+                "transitTime":  {"@type":"QuantitativeValue","minValue":0,"maxValue":0,"unitCode":"DAY"}
+              }
+            },
+           "hasMerchantReturnPolicy": {
+              "@type": "MerchantReturnPolicy",
+              "applicableCountry": "IN",
+              "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
+              "name": "SaaS Subscription — No Returns",
+              "description": "TaskRoom is a SaaS subscription service. Subscriptions are non-refundable. Cancel anytime to stop future billing. A 14-day free trial is available on Growth and Business plans."
+            }},
+          {"@type":"Offer","name":"Growth","price":"499","priceCurrency":"INR",
+           "availability":"https://schema.org/InStock","url":"https://taskroom.in/pricing",
+           "priceSpecification":{"@type":"UnitPriceSpecification","billingDuration":"P1M"},
+           "shippingDetails": {
+              "@type": "OfferShippingDetails",
+              "shippingRate": {"@type":"MonetaryAmount","value":"0","currency":"INR"},
+              "shippingDestination": {"@type":"DefinedRegion","addressCountry":"IN"},
+              "deliveryTime": {
+                "@type": "ShippingDeliveryTime",
+                "handlingTime": {"@type":"QuantitativeValue","minValue":0,"maxValue":0,"unitCode":"DAY"},
+                "transitTime":  {"@type":"QuantitativeValue","minValue":0,"maxValue":0,"unitCode":"DAY"}
+              }
+            },
+           "hasMerchantReturnPolicy": {
+              "@type": "MerchantReturnPolicy",
+              "applicableCountry": "IN",
+              "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
+              "name": "SaaS Subscription — No Returns",
+              "description": "TaskRoom is a SaaS subscription service. Subscriptions are non-refundable. Cancel anytime to stop future billing. A 14-day free trial is available on Growth and Business plans."
+            }},
+          {"@type":"Offer","name":"Business","price":"999","priceCurrency":"INR",
+           "availability":"https://schema.org/InStock","url":"https://taskroom.in/pricing",
+           "priceSpecification":{"@type":"UnitPriceSpecification","billingDuration":"P1M"},
+           "shippingDetails": {
+              "@type": "OfferShippingDetails",
+              "shippingRate": {"@type":"MonetaryAmount","value":"0","currency":"INR"},
+              "shippingDestination": {"@type":"DefinedRegion","addressCountry":"IN"},
+              "deliveryTime": {
+                "@type": "ShippingDeliveryTime",
+                "handlingTime": {"@type":"QuantitativeValue","minValue":0,"maxValue":0,"unitCode":"DAY"},
+                "transitTime":  {"@type":"QuantitativeValue","minValue":0,"maxValue":0,"unitCode":"DAY"}
+              }
+            },
+           "hasMerchantReturnPolicy": {
+              "@type": "MerchantReturnPolicy",
+              "applicableCountry": "IN",
+              "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
+              "name": "SaaS Subscription — No Returns",
+              "description": "TaskRoom is a SaaS subscription service. Subscriptions are non-refundable. Cancel anytime to stop future billing. A 14-day free trial is available on Growth and Business plans."
+            }}
         ],
         "aggregateRating":{"@type":"AggregateRating","ratingValue":"4.8","reviewCount":"47","bestRating":"5"}
       },
@@ -868,8 +991,8 @@
         </nav>
         <nav class="l-footer-col" aria-label="Company links">
           <div class="l-footer-col-title">Company</div>
-          <a href="/privacy">Privacy Policy</a>
-          <a href="/terms">Terms of Service</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
           <a href="#" onclick="showLogin();return false">Sign In</a>
           <a href="#" onclick="openPlanChooser();return false">Create Account</a>
         </nav>
