@@ -697,6 +697,17 @@ function injectPricingSchema(plans) {
     "description": "TaskRoom is a SaaS subscription. Subscriptions are non-refundable. Cancel anytime to stop future billing."
   };
 
+  const shippingDetails = {
+    "@type": "OfferShippingDetails",
+    "shippingRate": { "@type": "MonetaryAmount", "value": "0", "currency": "INR" },
+    "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "IN" },
+    "deliveryTime": {
+      "@type": "ShippingDeliveryTime",
+      "handlingTime": { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY" },
+      "transitTime":  { "@type": "QuantitativeValue", "minValue": 0, "maxValue": 0, "unitCode": "DAY" }
+    }
+  };
+
   const offers = plans
     .filter(p => !p.isContactSales && p.monthlyPrice > 0)
     .map(p => ({
@@ -709,7 +720,7 @@ function injectPricingSchema(plans) {
       "priceValidUntil": validUntilStr,
       "url": "https://taskroom.in/pricing",
       "seller": { "@type": "Organization", "name": "TaskRoom" },
-      "shippingDetails": digitalShipping,
+      "shippingDetails": shippingDetails,
       "hasMerchantReturnPolicy": returnPolicy
     }));
 
