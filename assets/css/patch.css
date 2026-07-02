@@ -38,7 +38,7 @@ h1,h2,h3,h4,h5,h6,p,span.val,
 .sc-label,.sc-sub,.room-name,.room-desc,
 .panel-title,.panel-sub,.panel-sec-title,
 .info-row .label,.info-row .val,
-.page-hdr-left h1,.page-hdr-left p,
+.page-hdr-left h1,.page-hdr-left h2,.page-hdr-left p,
 .modal-title,.modal-sub,.card-title {
   transition: color 0.15s ease;
 }
@@ -232,7 +232,7 @@ body.dash-active #hero-canvas { display: none !important; }
 ══════════════════════════════════════════════════════════ */
 [data-theme="light"] #dashboard-view    { background: #f0f4f8; }
 [data-theme="light"] .dash-main         { background: #f0f4f8; }
-[data-theme="light"] .page-hdr-left h1  { color: #0d1b2a; }
+[data-theme="light"] .page-hdr-left h1, [data-theme="light"] .page-hdr-left h2 { color: #0d1b2a; }
 [data-theme="light"] .page-hdr-left p   { color: #4a5568; }
 [data-theme="light"] .dash-alert-strip.dash-alert-blue {
   background: rgba(19,127,236,.07); border-color: rgba(19,127,236,.18);

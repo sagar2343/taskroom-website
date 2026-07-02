@@ -1,6 +1,6 @@
 # ─────────────────────────────────────────────────────────────────
 #  robots.txt — TaskRoom (https://taskroom.in)
-#  Last updated: 2025-05-25
+#  Last updated: 2026-07-01
 # ─────────────────────────────────────────────────────────────────
 
 # ── All well-behaved crawlers ─────────────────────────────────────
@@ -61,21 +61,34 @@ Allow: /
 Disallow: /api/
 Crawl-delay: 3
 
-# ── Block known scrapers / AI trainers ───────────────────────────
+# ── AI search / answer-engine crawlers — allowed for AEO visibility ─
 User-agent: GPTBot
-Disallow: /
+Allow: /
+Disallow: /api/
 
 User-agent: ChatGPT-User
-Disallow: /
+Allow: /
+Disallow: /api/
 
-User-agent: CCBot
-Disallow: /
+User-agent: PerplexityBot
+Allow: /
+Disallow: /api/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /api/
 
 User-agent: anthropic-ai
-Disallow: /
+Allow: /
+Disallow: /api/
 
-User-agent: Claude-Web
-Disallow: /
+User-agent: Google-Extended
+Allow: /
+
+# ── CCBot (Common Crawl — feeds many AI training sets) ────────────
+User-agent: CCBot
+Allow: /
+Disallow: /api/
 
 # ── Sitemap location ─────────────────────────────────────────────
 Sitemap: https://taskroom.in/sitemap.xml

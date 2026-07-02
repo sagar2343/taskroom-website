@@ -14,12 +14,12 @@
 
   <url>
     <loc>https://taskroom.in/</loc>
-    <lastmod>2025-05-25</lastmod>
+    <lastmod>2026-07-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://taskroom.in/og-image.png</image:loc>
-      <image:title>TaskRoom — GPS Field Employee Tracking &amp; Workforce Management</image:title>
+      <image:title>Field Employee Tracking Software India — TaskRoom</image:title>
       <image:caption>Real-time dashboard showing live GPS location of field employees, task progress, and attendance data</image:caption>
     </image:image>
     <image:image>
@@ -30,19 +30,19 @@
 
   <url>
     <loc>https://taskroom.in/features</loc>
-    <lastmod>2025-05-25</lastmod>
+    <lastmod>2026-07-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image>
       <image:loc>https://taskroom.in/og-image.png</image:loc>
-      <image:title>TaskRoom Features — GPS Tracking, Multi-Step Tasks, Proof of Work</image:title>
+      <image:title>TaskRoom Features: GPS Tracking &amp; Photo Proof App</image:title>
       <image:caption>TaskRoom feature overview: GPS tracking, photo proof, digital signatures, attendance management</image:caption>
     </image:image>
   </url>
 
   <url>
     <loc>https://taskroom.in/mobile-app</loc>
-    <lastmod>2025-05-25</lastmod>
+    <lastmod>2026-07-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -55,7 +55,7 @@
 
   <url>
     <loc>https://taskroom.in/pricing</loc>
-    <lastmod>2025-05-25</lastmod>
+    <lastmod>2026-07-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -67,12 +67,12 @@
 
   <url>
     <loc>https://taskroom.in/industries</loc>
-    <lastmod>2025-05-25</lastmod>
+    <lastmod>2026-07-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
       <image:loc>https://taskroom.in/og-image.png</image:loc>
-      <image:title>TaskRoom — Field Tracking for Construction, Pharma, Delivery &amp; More</image:title>
+      <image:title>Field Tracking Software by Industry | TaskRoom</image:title>
       <image:caption>TaskRoom used by construction, pharma, delivery, logistics, facility management, security and healthcare teams</image:caption>
     </image:image>
   </url>
@@ -100,52 +100,6 @@
         <image:caption>TaskRoom terms and conditions for field employee tracking software usage</image:caption>
       </image:image>
     </url>
-
-  <!-- ═══════════════════════════════════════════════
-       DEEP-LINK ANCHORS — help Googlebot find section content
-  ═══════════════════════════════════════════════ -->
-
-  <url>
-    <loc>https://taskroom.in/#l-features</loc>
-    <lastmod>2025-05-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://taskroom.in/#l-app</loc>
-    <lastmod>2025-05-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://taskroom.in/#l-pricing</loc>
-    <lastmod>2025-05-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-
-  <url>
-    <loc>https://taskroom.in/#l-faq</loc>
-    <lastmod>2025-05-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-
-  <url>
-    <loc>https://taskroom.in/#l-industries</loc>
-    <lastmod>2025-05-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-
-  <url>
-    <loc>https://taskroom.in/#l-testimonials</loc>
-    <lastmod>2025-05-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
-  </url>
 
   <!-- ═══════════════════════════════════════════════
        APK DOWNLOAD — direct indexable asset

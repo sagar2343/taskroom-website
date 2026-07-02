@@ -60,7 +60,7 @@
 
 /* ── Page Headers ────────────────────────────────────────────── */
 .page-hdr { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 22px; flex-wrap: wrap; gap: 12px; }
-.page-hdr-left h1 { font-size: 22px; font-weight: 800; margin-bottom: 3px; letter-spacing: -.4px; }
+.page-hdr-left h1, .page-hdr-left h2 { font-size: 22px; font-weight: 800; margin-bottom: 3px; letter-spacing: -.4px; }
 .page-hdr-left p  { color: var(--text2); font-size: 13.5px; }
 .page-hdr-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
@@ -381,7 +381,7 @@ tr:hover td { background: rgba(255,255,255,.015); }
   .dash-main { padding: 14px 12px 84px; }
   #sb-toggle { display: none !important; }
   .page-hdr { margin-bottom: 14px; gap: 8px; }
-  .page-hdr-left h1 { font-size: 18px; }
+  .page-hdr-left h1, .page-hdr-left h2 { font-size: 18px; }
   .page-hdr-actions .btn { padding: 7px 12px; font-size: 12px; }
   .stat-grid { grid-template-columns: 1fr 1fr; }
   .tbl-wrap { overflow-x: auto; }
