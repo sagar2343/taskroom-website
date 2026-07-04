@@ -175,7 +175,12 @@ async function submitLogin(e) {
             <div style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px">This dashboard is for <strong style="color:var(--text)">managers only</strong>.<br>Employees use the <strong style="color:var(--text)">TaskRoom mobile app</strong>.</div>
             <div style="display:flex;flex-direction:column;gap:8px">
               <a href="https://play.google.com/store/apps/details?id=com.taskroom.app" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(19,127,236,.12);border:1px solid rgba(19,127,236,.3);color:var(--primary-light);padding:10px 16px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none">
-                <svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3v18l9-9L4 3z" fill="currentColor"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+                  <polygon points="4,3 4,9 20,12" fill="#00c6ff"/>
+                  <polygon points="4,9 4,12.5 20,12" fill="#ff3d57"/>
+                  <polygon points="4,12.5 4,16 20,12" fill="#ffcd3c"/>
+                  <polygon points="4,16 4,21 20,12" fill="#3ddc84"/>
+                </svg>
                 Get it on Google Play
               </a>
               <div style="display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--text3);padding:10px 16px;border-radius:8px;font-size:13px;font-weight:600">iOS — Coming Soon</div>
