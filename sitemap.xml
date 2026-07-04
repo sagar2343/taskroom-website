@@ -101,15 +101,4 @@
       </image:image>
     </url>
 
-  <!-- ═══════════════════════════════════════════════
-       APK DOWNLOAD — direct indexable asset
-  ═══════════════════════════════════════════════ -->
-
-  <url>
-    <loc>https://taskroom.in/download/TaskRoom_v1.apk</loc>
-    <lastmod>2025-05-25</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
 </urlset>

@@ -174,9 +174,9 @@ async function submitLogin(e) {
             <div style="font-size:15px;font-weight:800;color:var(--amber);margin-bottom:6px">Hey ${esc(name)}, use the mobile app!</div>
             <div style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px">This dashboard is for <strong style="color:var(--text)">managers only</strong>.<br>Employees use the <strong style="color:var(--text)">TaskRoom mobile app</strong>.</div>
             <div style="display:flex;flex-direction:column;gap:8px">
-              <a href="/download/TaskRoom_v1.apk" download style="display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(61,220,132,.12);border:1px solid rgba(61,220,132,.3);color:#3ddc84;padding:10px 16px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76a2 2 0 0 0 2.73.75l10.49-6.07-2.9-2.9-10.32 8.22zm17.29-13.53L17.03 8l-3.06 3.06 3.06 3.06 3.5-2.01a1.5 1.5 0 0 0-.06-2.88zM2.12.46A1.5 1.5 0 0 0 2 1.12V22.9a1.5 1.5 0 0 0 .12.65l.07.07L13.5 12 2.19.39l-.07.07zM15.97 5.03l-10.06-5.8A2 2 0 0 0 3.18.22L13.5 12l2.47-6.97z"/></svg>
-                Download for Android
+              <a href="https://play.google.com/store/apps/details?id=com.taskroom.app" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(19,127,236,.12);border:1px solid rgba(19,127,236,.3);color:var(--primary-light);padding:10px 16px;border-radius:8px;font-size:13px;font-weight:700;text-decoration:none">
+                <svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3v18l9-9L4 3z" fill="currentColor"/></svg>
+                Get it on Google Play
               </a>
               <div style="display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--text3);padding:10px 16px;border-radius:8px;font-size:13px;font-weight:600">iOS — Coming Soon</div>
             </div>

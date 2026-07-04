@@ -20,7 +20,7 @@ body,
 .l-feature-card, .l-problem-card, .l-app-card,
 .l-app-download-row, .l-app-stats, .l-diff-block, .l-diff-proof,
 .l-calc-wrap, .l-cta-section, .accent-card, .hero-dashboard,
-.l-app-badge-android, #land-footer, .tab-nav, .tab-btn,
+.l-app-badge-android, .l-app-badge-playstore, #land-footer, .tab-nav, .tab-btn,
 #main-nav, #land-nav, .l-section-alt,
 #sticky-cta-bar, .code-display, .code-chip {
   transition: background-color 0.22s ease,
@@ -517,6 +517,7 @@ body.dash-active #hero-canvas { display: none !important; }
 [data-theme="light"] .l-app-feat-list li   { color: #4a5568; }
 [data-theme="light"] .l-app-download-row   { background: #ffffff; border-color: rgba(0,0,0,.08); }
 [data-theme="light"] .l-app-badge-android  { background: #f8fafc; border-color: rgba(16,185,129,.2); }
+[data-theme="light"] .l-app-badge-playstore { background: #f8fafc; border-color: rgba(19,127,236,.25); }
 [data-theme="light"] .l-app-stats          { background: #ffffff; border-color: rgba(0,0,0,.08); }
 [data-theme="light"] .l-app-stat-val       { color: #0d1b2a; }
 [data-theme="light"] .l-app-stat-lbl       { color: #6b7280; }

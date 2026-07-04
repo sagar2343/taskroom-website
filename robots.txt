@@ -17,9 +17,6 @@ Allow: /pricing/
 Allow: /industries$
 Allow: /industries/
 
-# APK download page — let Google index the app download
-Allow: /download/
-
 # Static assets Google needs to render pages
 Allow: /assets/css/
 Allow: /assets/js/
@@ -31,6 +28,9 @@ Allow: /manifest.json
 # Block server-side / API routes — not indexable content
 Disallow: /api/
 Disallow: /api
+
+# Retired — app is now distributed via Google Play, not self-hosted APK
+Disallow: /download/
 
 # Block SPA auth/session routes
 Disallow: /?login=
