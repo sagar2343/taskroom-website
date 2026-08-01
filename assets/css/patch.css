@@ -702,3 +702,58 @@ body.dash-active #hero-canvas { display: none !important; }
   .l-app-split   { grid-template-columns: 1fr !important; }
   div[style*="grid-template-columns:1fr 1fr"] { grid-template-columns: 1fr !important; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   §38  DASHBOARD POLISH — nav accent, avatar consistency,
+        card hover lift, mobile badge parity (admin-panel look)
+══════════════════════════════════════════════════════════ */
+
+/* Active sidebar item gets a left accent bar, like the admin panel */
+.sb-item { position: relative; }
+.sb-item.active::before {
+  content: ''; position: absolute; left: -6px; top: 50%; transform: translateY(-50%);
+  width: 3px; height: 18px; border-radius: 0 3px 3px 0; background: var(--primary);
+}
+[data-theme="light"] .sb-item.active::before { background: var(--primary); }
+
+/* Sidebar toggle button: smooth rotate + no layout jump between ☰ / ✕ */
+#sb-toggle { transition: transform .18s ease, background .15s; width: 36px; text-align: center; }
+#sb-toggle:active { transform: scale(.92); }
+
+/* Avatar: consistent ring + smoother image fade-in everywhere (sidebar, tables, cards, panels) */
+.avatar, .sb-avatar {
+  box-shadow: 0 0 0 1px var(--border2);
+}
+.avatar img, .sb-avatar img { animation: avatarFadeIn .2s ease; }
+@keyframes avatarFadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Card + room-card + stat-card hover lift, unified (matches admin panel row/card hover feel) */
+.card, .org-card, .plan-card { transition: border-color var(--transition), box-shadow .2s, transform .2s; }
+.card:hover, .org-card:hover { border-color: var(--border2); }
+.room-card:hover { box-shadow: 0 10px 36px rgba(0,0,0,.45); }
+.today-task:hover, .qa-item:hover, .emp-ac:hover, .score-row:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,.25);
+}
+.emp-ac { transition: box-shadow .18s, border-color .18s; }
+
+/* Mobile bottom nav: mirror the sidebar's red task badge so counts stay in sync everywhere */
+.mob-nav-item { position: relative; }
+.mob-nav-badge {
+  position: absolute; top: 2px; right: calc(50% - 20px); min-width: 15px; height: 15px;
+  border-radius: 99px; background: var(--red); color: #fff; font-size: 9px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; padding: 0 3px;
+  border: 2px solid var(--bg); line-height: 1;
+}
+
+/* Nav items: slightly larger tap targets + smoother active swap on mobile */
+@media (max-width: 768px) {
+  .sb-item { padding: 10px 12px; }
+  .mob-nav-item { padding: 6px 2px; }
+  .mob-nav-item .mob-ico { transition: transform .15s, color .15s; }
+}
+
+/* Table rows: subtle left accent on hover to match sidebar nav language */
+tr.task-row:hover { box-shadow: inset 3px 0 0 var(--primary); }
+
+/* Org avatar + sidebar avatar: ensure <img> always fills the rounded box (safety net) */
+.org-avatar img, .sb-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }

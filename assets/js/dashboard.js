@@ -77,6 +77,8 @@ function toggleSidebar() {
   sb.classList.toggle('open');
   const overlay = $('sidebar-overlay');
   if (overlay) overlay.classList.toggle('show', willOpen);
+  const btn = $('sb-toggle');
+  if (btn) btn.textContent = willOpen ? '✕' : '☰';
 }
 
 function applyRoleUI() {
@@ -86,8 +88,14 @@ function applyRoleUI() {
 
 function fillSidebar() {
   if (!_org) return;
-  const L = (_org.name || 'O')[0].toUpperCase();
-  const av = $('sb-av'); if (av) av.textContent = L;
+  const av = $('sb-av');
+  if (av) {
+    if (_user?.profilePicture) {
+      av.innerHTML = `<img src="${esc(_user.profilePicture)}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:inherit" onerror="this.remove();this.parentElement.textContent='${(_user?.fullName||_user?.username||'U')[0].toUpperCase()}'">`;
+    } else {
+      av.textContent = (_user?.fullName || _user?.username || 'U')[0].toUpperCase();
+    }
+  }
   if ($('sb-uname')) $('sb-uname').textContent = _user?.fullName || _user?.username || 'User';
   if ($('sb-urole')) { $('sb-urole').textContent = _user?.role || 'employee'; $('sb-urole').className = 'sb-role ' + (_user?.role || 'employee'); }
   if ($('sb-orgname'))  $('sb-orgname').textContent  = _org.name || '';
@@ -240,8 +248,8 @@ function renderEmpActivity(activity) {
     return;
   }
   el.innerHTML = activity.map(a => {
-    const u = a.employee; const init = (u?.fullName||u?.username||'?')[0].toUpperCase();
-    return `<div class="emp-ac"><div class="avatar" style="position:relative">${init}<div style="position:absolute;bottom:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:${u?.isOnline?'var(--green)':'var(--text3)'};border:2px solid var(--surface2)"></div></div><div style="min-width:0"><div style="font-size:12.5px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(u?.fullName||u?.username||'—')}</div><div style="font-size:11px;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(a.activeTask||'No active task')}</div><div class="badge ${a.taskStatus==='in_progress'?'badge-in-progress':'badge-pending'}" style="font-size:9.5px;margin-top:3px">${(a.taskStatus||'pending').replace('_',' ')}</div></div></div>`;
+    const u = a.employee;
+    return `<div class="emp-ac">${avatarHTML(u, {size:38, online:true})}<div style="min-width:0"><div style="font-size:12.5px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(u?.fullName||u?.username||'—')}</div><div style="font-size:11px;color:var(--text3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(a.activeTask||'No active task')}</div><div class="badge ${a.taskStatus==='in_progress'?'badge-in-progress':'badge-pending'}" style="font-size:9.5px;margin-top:3px">${(a.taskStatus||'pending').replace('_',' ')}</div></div></div>`;
   }).join('');
 }
 
@@ -477,8 +485,8 @@ function renderRoomMembers(members) {
   const el = $('rd-members-list');
   if (!members.length) { el.innerHTML = '<div class="empty-state"><div class="empty-icon">👥</div><h3>No Members</h3></div>'; return; }
   el.innerHTML = '<div style="display:flex;flex-direction:column;gap:7px">' + members.map(m => {
-    const u = m.user||m, init = (u.fullName||u.username||'?')[0].toUpperCase();
-    return `<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border-radius:var(--r2);border:1px solid var(--border)"><div class="avatar" style="position:relative">${init}<div style="position:absolute;bottom:-2px;right:-2px;width:8px;height:8px;border-radius:50%;background:${u.isOnline?'var(--green)':'var(--text3)'};border:2px solid var(--surface2)"></div></div><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700">${esc(u.fullName||u.username||'—')}</div><div style="font-size:11.5px;color:var(--text3)">@${esc(u.username||'—')}</div></div><div class="badge badge-${u.role||'employee'}">${u.role||'employee'}</div></div>`;
+    const u = m.user||m;
+    return `<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border-radius:var(--r2);border:1px solid var(--border)">${avatarHTML(u,{size:36,online:true})}<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700">${esc(u.fullName||u.username||'—')}</div><div style="font-size:11.5px;color:var(--text3)">@${esc(u.username||'—')}</div></div><div class="badge badge-${u.role||'employee'}">${u.role||'employee'}</div></div>`;
   }).join('') + '</div>';
 }
 
@@ -540,10 +548,9 @@ async function loadTasks(pg=1) {
       const pct  = t.totalSteps > 0 ? Math.round((t.completedSteps||0)/t.totalSteps*100) : 0;
       const scls = {'pending':'badge-pending','in_progress':'badge-in-progress','completed':'badge-completed','cancelled':'badge-cancelled','overdue':'badge-overdue'}[t.status]||'badge-pending';
       const overdue = isOverdue(t.endDatetime) && !['completed','cancelled'].includes(t.status);
-      const init  = (t.assignedTo?.fullName||t.assignedTo?.username||'?')[0].toUpperCase();
       return `<tr class="task-row" onclick="openTaskPanel('${t._id}')">
         <td><div class="task-title-cell">${esc(t.title)}</div>${t.isFieldWork?'<div style="font-size:10.5px;color:var(--info);margin-top:2px">📍 GPS</div>':''}</td>
-        <td><div style="display:flex;align-items:center;gap:7px"><div class="avatar" style="width:26px;height:26px;font-size:11px">${init}</div><div style="font-size:12.5px;font-weight:600;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.assignedTo?.fullName||t.assignedTo?.username||'—')}</div></div></td>
+        <td><div style="display:flex;align-items:center;gap:7px">${avatarHTML(t.assignedTo,{size:26})}<div style="font-size:12.5px;font-weight:600;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.assignedTo?.fullName||t.assignedTo?.username||'—')}</div></div></td>
         <td style="color:var(--text2);font-size:12px">${esc(t.room?.name||'—')}</td>
         <td><div class="badge badge-${t.priority||'medium'}">${t.priority||'medium'}</div></td>
         <td><div class="badge ${scls}">${(t.status||'pending').replace('_',' ')}</div>${overdue?'<div style="font-size:10px;color:var(--red);margin-top:1px">Overdue</div>':''}</td>
@@ -598,12 +605,12 @@ function renderTaskPanel(t) {
   }
   $('tp-gps-tab').style.display = hasGPS ? '' : 'none';
   const overdue = isOverdue(t.endDatetime) && !['completed','cancelled'].includes(t.status);
-  const u = t.assignedTo; const init = u ? (u.fullName||u.username||'?')[0].toUpperCase() : '?';
+  const u = t.assignedTo;
 
   let html = `<div id="tp-tab-info" class="tab-content active">
     <div class="panel-sec"><div class="panel-sec-title">Assigned Employee</div>
       <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border-radius:var(--r2);border:1px solid var(--border)">
-        <div class="avatar" style="position:relative">${init}<div style="position:absolute;bottom:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:${u?.isOnline?'var(--green)':'var(--text3)'};border:2px solid var(--surface2)"></div></div>
+        ${avatarHTML(u,{size:40,online:true})}
         <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700">${esc(u?.fullName||u?.username||'—')}</div>${u?.username?`<div style="font-size:12px;color:var(--text3)">@${esc(u.username)}</div>`:''}</div>
         <div style="font-size:12px;color:${u?.isOnline?'var(--green)':'var(--text3)'}">● ${u?.isOnline?'Online':'Offline'}</div>
       </div>
@@ -762,9 +769,9 @@ async function loadAttendance(pg=1) {
     if (!records.length) { body.innerHTML = '<div class="tbl-empty">No attendance records found</div>'; renderPg('att-pg',pag,pg,'loadAttendance'); return; }
     body.innerHTML = `<div style="overflow-x:auto"><table><thead><tr><th>Date</th><th>Employee</th><th>Punch In</th><th>Punch Out</th><th>Total Hours</th><th>Sessions</th><th>Tasks Done</th><th>Details</th></tr></thead><tbody>
     ${records.map(r => {
-      const emp = r.employee; const init = (emp?.fullName||emp?.username||'?')[0].toUpperCase();
+      const emp = r.employee;
       const totalHrs = ((r.totalMinutes||0)/60).toFixed(1);
-      return `<tr><td style="font-weight:600">${fmtDate(r.workDate)}</td><td><div style="display:flex;align-items:center;gap:7px"><div class="avatar" style="width:26px;height:26px;font-size:11px">${init}</div><div><div style="font-size:12.5px;font-weight:600">${esc(emp?.fullName||emp?.username||'—')}</div></div></div></td><td style="color:var(--text2);font-size:12.5px">${r.punchInTime?fmtTime(r.punchInTime):(r.sessions?.[0]?.startTime?fmtTime(r.sessions[0].startTime):'—')}</td><td style="color:var(--text2);font-size:12.5px">${r.punchOutTime?fmtTime(r.punchOutTime):'—'}</td><td><span style="font-weight:700;color:${parseFloat(totalHrs)>=8?'var(--green)':parseFloat(totalHrs)>=4?'var(--amber)':'var(--text2)'}">${fmtMins(r.totalMinutes)}</span></td><td style="font-size:12.5px;color:var(--text2)">${(r.sessions||[]).length}</td><td style="font-size:12.5px;color:var(--text2)">${r.tasksCompleted||0}</td><td><button class="btn btn-ghost btn-sm" onclick="openAttDetail('${r._id}')">View →</button></td></tr>`;
+      return `<tr><td style="font-weight:600">${fmtDate(r.workDate)}</td><td><div style="display:flex;align-items:center;gap:7px">${avatarHTML(emp,{size:26})}<div><div style="font-size:12.5px;font-weight:600">${esc(emp?.fullName||emp?.username||'—')}</div></div></div></td><td style="color:var(--text2);font-size:12.5px">${r.punchInTime?fmtTime(r.punchInTime):(r.sessions?.[0]?.startTime?fmtTime(r.sessions[0].startTime):'—')}</td><td style="color:var(--text2);font-size:12.5px">${r.punchOutTime?fmtTime(r.punchOutTime):'—'}</td><td><span style="font-weight:700;color:${parseFloat(totalHrs)>=8?'var(--green)':parseFloat(totalHrs)>=4?'var(--amber)':'var(--text2)'}">${fmtMins(r.totalMinutes)}</span></td><td style="font-size:12.5px;color:var(--text2)">${(r.sessions||[]).length}</td><td style="font-size:12.5px;color:var(--text2)">${r.tasksCompleted||0}</td><td><button class="btn btn-ghost btn-sm" onclick="openAttDetail('${r._id}')">View →</button></td></tr>`;
     }).join('')}</tbody></table></div>`;
     renderPg('att-pg', pag, pg, 'loadAttendance');
   } catch(e) { body.innerHTML = '<div class="tbl-empty">Error loading attendance.</div>'; }
@@ -814,8 +821,7 @@ async function loadMembers(pg=1) {
     if (!mbs.length) { body.innerHTML = `<div class="tbl-empty">No members yet. <a href="#" onclick="openInviteHelper();return false" style="color:var(--primary-light)">Invite your first employee →</a></div>`; renderPg('m-pg',pag,pg,'loadMembers'); return; }
     body.innerHTML = `<div style="overflow-x:auto"><table><thead><tr><th>Member</th><th>Username</th><th>Role</th><th>Status</th><th>Department</th><th>Joined</th></tr></thead><tbody>
     ${mbs.map(m => {
-      const init = (m.fullName||m.username||'?')[0].toUpperCase();
-      return `<tr><td><div style="display:flex;align-items:center;gap:9px"><div class="avatar">${m.profilePicture?`<img src="${esc(m.profilePicture)}" alt=""/>`:init}</div><div><div style="font-weight:600;font-size:13px">${esc(m.fullName||m.username)}</div><div style="font-size:11.5px;color:var(--text3)">${esc(m.email||m.mobile||'')}</div></div></div></td><td class="mono" style="font-size:12.5px;color:var(--text2)">@${esc(m.username)}</td><td><div class="badge badge-${m.role||'employee'}">${m.role||'employee'}</div></td><td><div style="display:flex;align-items:center;gap:5px"><div class="online-dot ${m.isOnline?'on':'off'}"></div><span style="font-size:12.5px;color:var(--text2)">${m.isOnline?'Online':'Offline'}</span></div></td><td style="color:var(--text2);font-size:12.5px">${esc(m.department||'—')}</td><td style="color:var(--text3);font-size:12.5px">${fmtDate(m.createdAt)}</td></tr>`;
+      return `<tr><td><div style="display:flex;align-items:center;gap:9px">${avatarHTML(m,{size:38})}<div><div style="font-weight:600;font-size:13px">${esc(m.fullName||m.username)}</div><div style="font-size:11.5px;color:var(--text3)">${esc(m.email||m.mobile||'')}</div></div></div></td><td class="mono" style="font-size:12.5px;color:var(--text2)">@${esc(m.username)}</td><td><div class="badge badge-${m.role||'employee'}">${m.role||'employee'}</div></td><td><div style="display:flex;align-items:center;gap:5px"><div class="online-dot ${m.isOnline?'on':'off'}"></div><span style="font-size:12.5px;color:var(--text2)">${m.isOnline?'Online':'Offline'}</span></div></td><td style="color:var(--text2);font-size:12.5px">${esc(m.department||'—')}</td><td style="color:var(--text3);font-size:12.5px">${fmtDate(m.createdAt)}</td></tr>`;
     }).join('')}</tbody></table></div>`;
     renderPg('m-pg', pag, pg, 'loadMembers');
   } catch(e) { body.innerHTML = '<div class="tbl-empty">Error loading members.</div>'; }
@@ -852,7 +858,7 @@ async function loadAnalytics() {
       html += `<div class="card"><div class="card-hdr"><div class="card-title">🏆 Productivity Scores</div><div style="font-size:12.5px;color:var(--text2)">Avg: <strong style="color:var(--primary-light)">${prod.summary?.avgScore||0}/100</strong></div></div>`;
       (prod.scores||[]).forEach(e => {
         const bc = {A:'var(--green)',B:'var(--primary-light)',C:'var(--amber)',D:'var(--red)'}[e.grade]||'var(--red)';
-        html += `<div class="score-row"><div style="font-size:12px;color:var(--text3);width:20px">#${(prod.scores||[]).indexOf(e)+1}</div><div class="avatar" style="width:30px;height:30px;font-size:12px">${(e.fullName||'?')[0]}</div><div style="flex:1;min-width:0"><div style="font-size:12.5px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(e.fullName)}</div><div class="score-bar"><div class="score-fill" style="width:${e.score}%;background:${bc}"></div></div><div style="font-size:11px;color:var(--text3);margin-top:2px">${e.stats.daysPresent}d · ${e.stats.totalHours}h · ${e.stats.completionRate}% tasks</div></div><div style="text-align:right"><div style="font-size:18px;font-weight:900;color:${bc}">${e.score}</div></div></div>`;
+        html += `<div class="score-row"><div style="font-size:12px;color:var(--text3);width:20px">#${(prod.scores||[]).indexOf(e)+1}</div>${avatarHTML(e,{size:30})}<div style="flex:1;min-width:0"><div style="font-size:12.5px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(e.fullName)}</div><div class="score-bar"><div class="score-fill" style="width:${e.score}%;background:${bc}"></div></div><div style="font-size:11px;color:var(--text3);margin-top:2px">${e.stats.daysPresent}d · ${e.stats.totalHours}h · ${e.stats.completionRate}% tasks</div></div><div style="text-align:right"><div style="font-size:18px;font-weight:900;color:${bc}">${e.score}</div></div></div>`;
       });
       html += '</div>';
     }
@@ -966,7 +972,7 @@ async function loadCtMembers(){
 function renderCtMembers(){
   const el=$('ct-members-list');
   if(!_ctMembers.length){el.innerHTML='<div style="padding:16px;text-align:center;color:var(--text3);font-size:13px">No members. Add employees first.</div>';updateCtCount();return;}
-  el.innerHTML=_ctMembers.map(m=>{const u=m.user||m,id=u._id||u.id,sel=_ctSelectedIds.has(id),init=(u.fullName||u.username||'?')[0].toUpperCase();return`<div class="member-select-item ${sel?'selected':''}" onclick="ctToggle('${id}',this)"><div class="avatar" style="width:32px;height:32px;font-size:12px">${init}</div><div style="flex:1;min-width:0"><div style="font-size:12.5px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(u.fullName||u.username||'—')}</div><div style="font-size:11px;color:var(--text3)">@${esc(u.username||'—')}</div></div><div style="font-size:11px;color:${u.isOnline?'var(--green)':'var(--text3)'}">● ${u.isOnline?'Online':'Offline'}</div><div class="check">${sel?'✓':''}</div></div>`;}).join('');
+  el.innerHTML=_ctMembers.map(m=>{const u=m.user||m,id=u._id||u.id,sel=_ctSelectedIds.has(id);return`<div class="member-select-item ${sel?'selected':''}" onclick="ctToggle('${id}',this)">${avatarHTML(u,{size:32})}<div style="flex:1;min-width:0"><div style="font-size:12.5px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(u.fullName||u.username||'—')}</div><div style="font-size:11px;color:var(--text3)">@${esc(u.username||'—')}</div></div><div style="font-size:11px;color:${u.isOnline?'var(--green)':'var(--text3)'}">● ${u.isOnline?'Online':'Offline'}</div><div class="check">${sel?'✓':''}</div></div>`;}).join('');
   $('ct-member-count').textContent=_ctMembers.length+' member'+(_ctMembers.length!==1?'s':'');
   updateCtCount();
 }

@@ -37,6 +37,25 @@ const esc = s => {
 };
 const $ = id => document.getElementById(id);
 
+/* ── Avatar helper — profile picture with initials fallback ──────────
+   Used everywhere a user avatar is rendered: sidebar, tables, cards,
+   task panels, member pickers. Pass the user/member object and options.
+   opts: { size:number (px, default 34), online:boolean (show status dot) }
+──────────────────────────────────────────────────────────────────── */
+function avatarHTML(user, opts = {}) {
+  const size = opts.size || 34;
+  const pic  = user?.profilePicture || user?.avatar || '';
+  const init = (user?.fullName || user?.username || '?').trim()[0]?.toUpperCase() || '?';
+  const dotSize = size >= 34 ? 9 : 8;
+  const dot = opts.online
+    ? `<div style="position:absolute;bottom:-2px;right:-2px;width:${dotSize}px;height:${dotSize}px;border-radius:50%;background:${user?.isOnline ? 'var(--green)' : 'var(--text3)'};border:2px solid var(--surface2)"></div>`
+    : '';
+  const inner = pic
+    ? `<img src="${esc(pic)}" alt="" loading="lazy" onerror="this.remove();this.parentElement.textContent='${init}'">`
+    : init;
+  return `<div class="avatar" style="position:relative;width:${size}px;height:${size}px;font-size:${Math.round(size * 0.38)}px;flex-shrink:0">${inner}${dot}</div>`;
+}
+
 const fmtDate = d => {
   if (!d) return '—';
   const t = new Date(d);
