@@ -205,6 +205,7 @@
   <link rel="stylesheet" href="assets/css/landing.css">
   <link rel="stylesheet" href="assets/css/dashboard.css">
   <link rel="stylesheet" href="assets/css/patch.css">
+  <link rel="stylesheet" href="assets/css/tasks.css">
 
 </head>
 
@@ -939,7 +940,7 @@
           </div>
           <div class="page-hdr-actions">
             <button class="btn btn-ghost btn-sm" onclick="refreshDash()">🔄 Refresh</button>
-            <button class="btn btn-primary btn-sm manager-only" onclick="showPage('rooms',document.getElementById('nav-rooms'))">+ Create Task</button>
+            <button class="btn btn-primary btn-sm manager-only" onclick="openCreateTask()">+ Create Task</button>
           </div>
         </div>
         <div class="stat-grid" id="ov-stats">
@@ -1027,6 +1028,7 @@
         <div class="page-hdr">
           <div class="page-hdr-left"><h2>Tasks</h2><p>All tasks across your organization.</p></div>
           <div class="page-hdr-actions">
+            <button class="btn btn-primary btn-sm manager-only" onclick="openCreateTask()">+ Create Task</button>
             <select id="task-priority-filter" onchange="loadTasks(1)" aria-label="Filter by priority" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-size:13px;color:var(--text)"><option value="">All Priority</option><option value="high">🔴 High</option><option value="medium">🟡 Medium</option><option value="low">🟢 Low</option></select>
           </div>
         </div>
@@ -1037,6 +1039,7 @@
           <div class="filter-tab" role="tab" onclick="setTaskFilter('completed',this)">Completed</div>
           <div class="filter-tab" role="tab" onclick="setTaskFilter('overdue',this)">Overdue</div>
           <div class="filter-tab" role="tab" onclick="setTaskFilter('cancelled',this)">Cancelled</div>
+          <div class="filter-tab" role="tab" onclick="setTaskFilter('expired',this)">Missed</div>
         </div>
         <div class="tbl-wrap">
           <div class="tbl-hdr">
@@ -1110,14 +1113,11 @@
         <div class="panel-sub"   id="tp-sub">Loading...</div>
       </div>
       <div style="display:flex;gap:7px;align-items:center">
+        <button class="btn btn-ghost btn-sm manager-only" id="tp-recreate-btn" onclick="openRecreateTask()" style="display:none">↻ Recreate</button>
+        <button class="btn btn-ghost btn-sm manager-only" id="tp-edit-btn" onclick="openEditTask()" style="display:none">✎ Edit</button>
         <button class="btn btn-danger btn-sm manager-only" id="tp-cancel-btn" onclick="cancelCurrentTask()" style="display:none">✕ Cancel Task</button>
         <div class="modal-close" onclick="closeTaskPanel()" role="button" tabindex="0" aria-label="Close panel">✕</div>
       </div>
-    </div>
-    <div id="tp-tabs" class="tab-nav" style="padding:0 22px;margin-bottom:0;display:none" role="tablist">
-      <button class="tab-btn active" role="tab" onclick="showTaskTab('info',this)">Info</button>
-      <button class="tab-btn" role="tab" onclick="showTaskTab('steps',this)">Steps</button>
-      <button class="tab-btn" role="tab" onclick="showTaskTab('gps',this)" id="tp-gps-tab" style="display:none">📍 GPS Route</button>
     </div>
     <div class="panel-body" id="tp-body"><div class="loading"><div class="spinner"></div></div></div>
   </aside>
@@ -1374,63 +1374,7 @@
   </div>
 </div>
 
-<!-- Create Task Wizard -->
-<div class="overlay" id="modal-create-task" role="dialog" aria-label="Create task" aria-modal="true">
-  <div class="modal modal-lg">
-    <div class="modal-hdr"><div><div class="modal-title">Create Task</div><div class="modal-sub" id="ct-room-sub">Assign a new task</div></div><div class="modal-close" onclick="closeM('modal-create-task')" role="button" tabindex="0" aria-label="Close">✕</div></div>
-    <div class="wizard-steps" role="list">
-      <div class="wz-step" role="listitem"><div class="wz-dot active" id="wz-dot-1">1</div><div class="wz-label active" id="wz-lbl-1">Details</div></div>
-      <div class="wz-step" role="listitem"><div class="wz-dot" id="wz-dot-2">2</div><div class="wz-label" id="wz-lbl-2">Steps</div></div>
-      <div class="wz-step" role="listitem"><div class="wz-dot" id="wz-dot-3">3</div><div class="wz-label" id="wz-lbl-3">Assign</div></div>
-    </div>
-    <div id="alert-create-task"></div>
-    <div class="wizard-page active" id="wz-page-1">
-      <div class="fg" id="fg-ct-title"><label for="ct-title">Task Title *</label><input type="text" id="ct-title" placeholder="e.g. Deliver Order to Site C" maxlength="120"><div class="f-err">Title is required</div></div>
-      <div class="fg"><label for="ct-note">Note / Instructions</label><textarea id="ct-note" rows="2" style="resize:vertical" placeholder="Extra instructions for employee…"></textarea></div>
-      <div class="form-row">
-        <div class="fg"><label for="ct-priority">Priority</label><select id="ct-priority"><option value="medium">🟡 Medium</option><option value="high">🔴 High</option><option value="low">🟢 Low</option></select></div>
-        <div class="fg" style="display:flex;align-items:flex-end"><label class="form-check w-full" style="margin:0"><input type="checkbox" id="ct-track"><div class="form-check-info"><h6>📍 Track GPS Location</h6><p>Ping every 30 seconds</p></div></label></div>
-      </div>
-      <div class="form-row">
-        <div class="fg" id="fg-ct-start"><label for="ct-start">Start Date &amp; Time *</label><input type="datetime-local" id="ct-start"><div class="f-err">Required</div></div>
-        <div class="fg" id="fg-ct-end"><label for="ct-end">End Date &amp; Time *</label><input type="datetime-local" id="ct-end"><div class="f-err">Required</div></div>
-      </div>
-      <div style="display:flex;justify-content:flex-end;margin-top:8px"><button type="button" class="btn btn-primary" onclick="wzNext(1)">Next: Add Steps →</button></div>
-    </div>
-    <div class="wizard-page" id="wz-page-2">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div style="font-size:13px;font-weight:600;color:var(--text2)">Define task steps (at least 1)</div><button type="button" class="btn btn-ghost btn-sm" onclick="addTaskStep()">+ Add Step</button></div>
-      <div id="ct-steps-list"></div>
-      <div id="ct-steps-empty" style="text-align:center;padding:28px;color:var(--text3)"><div style="font-size:36px;margin-bottom:8px">📋</div><div style="font-size:13px">No steps yet. Click "+ Add Step" above.</div></div>
-      <div style="display:flex;justify-content:space-between;margin-top:14px"><button type="button" class="btn btn-ghost" onclick="wzBack(2)">← Back</button><button type="button" class="btn btn-primary" onclick="wzNext(2)">Next: Assign →</button></div>
-    </div>
-    <div class="wizard-page" id="wz-page-3">
-      <div style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:12px">Select employees for this task:</div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px"><div style="font-size:12.5px;color:var(--text3)" id="ct-member-count">0 members</div><div style="display:flex;gap:5px"><button type="button" class="btn btn-ghost btn-sm" onclick="ctSelectAll()">All</button><button type="button" class="btn btn-ghost btn-sm" onclick="ctClearAll()">Clear</button></div></div>
-      <div class="member-select-list" id="ct-members-list"><div class="loading"><div class="spinner"></div></div></div>
-      <div style="display:flex;justify-content:space-between;margin-top:14px;align-items:center"><button type="button" class="btn btn-ghost" onclick="wzBack(3)">← Back</button><div style="display:flex;gap:8px;align-items:center"><div style="font-size:12.5px;color:var(--text2)" id="ct-selected-info">None selected</div><button type="button" class="btn btn-primary" id="btn-create-task" onclick="submitCreateTask()">🚀 Create Task</button></div></div>
-    </div>
-  </div>
-</div>
-
-<!-- GPS Map -->
-<div class="overlay" id="modal-gps" role="dialog" aria-label="GPS route map" aria-modal="true">
-  <div class="modal modal-full" style="padding:0;overflow:hidden;border-radius:var(--r3)">
-    <div style="padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--surface)">
-      <div><div class="modal-title" id="gps-modal-title">GPS Route Trace</div><div class="modal-sub" id="gps-modal-sub">Full route history</div></div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <div id="gps-trace-stats" class="gps-trace-info"></div>
-        <div class="modal-close" onclick="closeM('modal-gps');stopMap()" role="button" tabindex="0" aria-label="Close">✕</div>
-      </div>
-    </div>
-    <div class="map-modal-body" style="position:relative">
-      <div id="map-container" aria-label="GPS route map"></div>
-      <div class="map-overlay-controls">
-        <button class="map-ctrl-btn" onclick="mapFitBounds()">⊞ Fit</button>
-        <button class="map-ctrl-btn" onclick="mapToggleSatellite()">🛰️ Satellite</button>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- Create / edit / recreate task, location picker, live map: injected by assets/js/tasks.js -->
 
 <!-- Lightbox -->
 <div id="lightbox" role="dialog" aria-label="Image viewer" aria-modal="true">
@@ -1469,6 +1413,7 @@
 <script src="assets/js/landing.js"></script>
 <script src="assets/js/auth.js"></script>
 <script src="assets/js/dashboard.js"></script>
+<script src="assets/js/tasks.js"></script>
 
 <script>
 /* ── App Init ────────────────────────────────────────────────── */

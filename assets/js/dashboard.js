@@ -499,7 +499,7 @@ async function loadRoomTasks(roomId) {
     if (!tasks.length) { el.innerHTML = `<div class="empty-state"><div class="empty-icon">✅</div><h3>No Tasks</h3>${_user?.role==='manager'?'<button class="btn btn-primary btn-sm" onclick="openCreateTaskForRoom()">+ Create Task</button>':''}</div>`; return; }
     el.innerHTML = '<div style="display:flex;flex-direction:column;gap:7px">' + tasks.map(t => {
       const pct  = t.totalSteps > 0 ? Math.round((t.completedSteps||0)/t.totalSteps*100) : 0;
-      const scls = {'pending':'badge-pending','in_progress':'badge-in-progress','completed':'badge-completed','cancelled':'badge-cancelled'}[t.status]||'badge-pending';
+      const scls = {'pending':'badge-pending','in_progress':'badge-in-progress','completed':'badge-completed','cancelled':'badge-cancelled','expired':'badge-expired'}[t.status]||'badge-pending';
       return `<div style="padding:11px 13px;background:var(--surface2);border-radius:var(--r2);border:1px solid var(--border);cursor:pointer;transition:border-color var(--transition)" onclick="closeM('modal-room-detail');setTimeout(()=>openTaskPanel('${t._id}'),120)" onmouseover="this.style.borderColor='rgba(19,127,236,.3)'" onmouseout="this.style.borderColor='var(--border)'"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px"><div style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.title)}</div><div class="badge ${scls}" style="font-size:10px;flex-shrink:0">${(t.status||'').replace('_',' ')}</div></div><div style="font-size:11.5px;color:var(--text3)">${esc(t.assignedTo?.fullName||t.assignedTo?.username||'—')} · ${fmtDT(t.startDatetime)}</div></div>`;
     }).join('') + '</div>';
   } catch(e) { el.innerHTML = '<div style="padding:16px;color:var(--red);font-size:13px">Error.</div>'; }
@@ -546,14 +546,14 @@ async function loadTasks(pg=1) {
     body.innerHTML = `<div style="overflow-x:auto"><table><thead><tr><th>Title</th><th>Employee</th><th>Room</th><th>Priority</th><th>Status</th><th>Progress</th><th>Deadline</th></tr></thead><tbody>
     ${tasks.map(t => {
       const pct  = t.totalSteps > 0 ? Math.round((t.completedSteps||0)/t.totalSteps*100) : 0;
-      const scls = {'pending':'badge-pending','in_progress':'badge-in-progress','completed':'badge-completed','cancelled':'badge-cancelled','overdue':'badge-overdue'}[t.status]||'badge-pending';
+      const scls = {'pending':'badge-pending','in_progress':'badge-in-progress','completed':'badge-completed','cancelled':'badge-cancelled','overdue':'badge-overdue','expired':'badge-expired'}[t.status]||'badge-pending';
       const overdue = isOverdue(t.endDatetime) && !['completed','cancelled'].includes(t.status);
       return `<tr class="task-row" onclick="openTaskPanel('${t._id}')">
         <td><div class="task-title-cell">${esc(t.title)}</div>${t.isFieldWork?'<div style="font-size:10.5px;color:var(--info);margin-top:2px">📍 GPS</div>':''}</td>
         <td><div style="display:flex;align-items:center;gap:7px">${avatarHTML(t.assignedTo,{size:26})}<div style="font-size:12.5px;font-weight:600;max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.assignedTo?.fullName||t.assignedTo?.username||'—')}</div></div></td>
         <td style="color:var(--text2);font-size:12px">${esc(t.room?.name||'—')}</td>
         <td><div class="badge badge-${t.priority||'medium'}">${t.priority||'medium'}</div></td>
-        <td><div class="badge ${scls}">${(t.status||'pending').replace('_',' ')}</div>${overdue?'<div style="font-size:10px;color:var(--red);margin-top:1px">Overdue</div>':''}</td>
+        <td><div class="badge ${scls}">${(t.status==='expired'?'missed':(t.status||'pending').replace('_',' '))}</div>${overdue?'<div style="font-size:10px;color:var(--red);margin-top:1px">Overdue</div>':''}</td>
         <td>${t.totalSteps>0?`<div class="progress-bar"><div class="progress-fill" style="background:${pct>=100?'var(--green)':pct>=50?'var(--primary)':'var(--amber)'};width:${pct}%"></div></div><div style="font-size:11px;color:var(--text3);margin-top:2px">${pct}%</div>`:'<span style="color:var(--text3);font-size:12px">—</span>'}</td>
         <td style="font-size:12px;${overdue?'color:var(--red)':''}">${fmtDT(t.endDatetime)}</td>
       </tr>`;
@@ -569,178 +569,7 @@ function setTaskFilter(val, btn) {
   loadTasks(1);
 }
 
-/* ── Task Detail Panel ───────────────────────────────────────── */
-async function openTaskPanel(taskId) {
-  _currentTaskId = taskId;
-  $('task-panel').classList.add('open');
-  $('tp-title').textContent = 'Loading…'; $('tp-sub').innerHTML = '';
-  $('tp-body').innerHTML = '<div class="loading"><div class="spinner"></div></div>';
-  $('tp-cancel-btn').style.display = 'none';
-  if (window.innerWidth <= 768 && typeof showMobBackBar === 'function') showMobBackBar('Task Detail');
-  // Keep tabs hidden until data loads
-  const tpTabs = $('tp-tabs');
-  if (tpTabs) { tpTabs.style.display = 'none'; tpTabs.style.overflowX = 'auto'; tpTabs.style.flexWrap = 'nowrap'; tpTabs.style.webkitOverflowScrolling = 'touch'; }
-  try {
-    const d = await api('POST', '/tasks/detail', { taskId });
-    if (!d.success) { $('tp-body').innerHTML = `<div class="empty-state"><div class="empty-icon">❌</div><h3>Error</h3><p>${esc(d.message)}</p></div>`; return; }
-    renderTaskPanel(d.data?.task);
-  } catch(e) { $('tp-body').innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><h3>Error loading task</h3></div>'; }
-}
-
-function renderTaskPanel(t) {
-  const scls = {'pending':'badge-pending','in_progress':'badge-in-progress','completed':'badge-completed','cancelled':'badge-cancelled'}[t.status]||'badge-pending';
-  const pct  = t.totalSteps > 0 ? Math.round((t.completedSteps||0)/t.totalSteps*100) : 0;
-  $('tp-title').textContent = t.title || 'Task';
-  $('tp-sub').innerHTML = `<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="badge ${scls}">${(t.status||'').replace('_',' ')}</span><span style="color:var(--text3)">·</span><span style="color:var(--text2);font-size:12px">${esc(t.room?.name||'—')}</span></div>`;
-  const canCancel = _user?.role === 'manager' && ['pending','in_progress'].includes(t.status);
-  if (canCancel) $('tp-cancel-btn').style.display = '';
-  const hasGPS = t.isFieldWork && (t.locationTrace?.length > 0 || t.liveLocation);
-  const tpTabs = $('tp-tabs');
-  if (tpTabs) {
-    tpTabs.style.display = 'flex';
-    tpTabs.style.overflowX = 'auto';
-    tpTabs.style.flexWrap = 'nowrap';
-    tpTabs.style.webkitOverflowScrolling = 'touch';
-    tpTabs.style.paddingBottom = '1px'; // prevent border clipping
-  }
-  $('tp-gps-tab').style.display = hasGPS ? '' : 'none';
-  const overdue = isOverdue(t.endDatetime) && !['completed','cancelled'].includes(t.status);
-  const u = t.assignedTo;
-
-  let html = `<div id="tp-tab-info" class="tab-content active">
-    <div class="panel-sec"><div class="panel-sec-title">Assigned Employee</div>
-      <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border-radius:var(--r2);border:1px solid var(--border)">
-        ${avatarHTML(u,{size:40,online:true})}
-        <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:700">${esc(u?.fullName||u?.username||'—')}</div>${u?.username?`<div style="font-size:12px;color:var(--text3)">@${esc(u.username)}</div>`:''}</div>
-        <div style="font-size:12px;color:${u?.isOnline?'var(--green)':'var(--text3)'}">● ${u?.isOnline?'Online':'Offline'}</div>
-      </div>
-    </div>
-    <div class="panel-sec"><div class="panel-sec-title">Task Details</div>
-      <div class="info-row"><span class="label">Priority</span><div class="badge badge-${t.priority||'medium'}">${t.priority||'medium'}</div></div>
-      <div class="info-row"><span class="label">GPS</span><span class="val">${t.isFieldWork?'📍 Enabled':'Disabled'}</span></div>
-      <div class="info-row"><span class="label">Start</span><span class="val">${fmtDT(t.startDatetime)}</span></div>
-      <div class="info-row"><span class="label">Deadline</span><span class="val" style="${overdue?'color:var(--red)':''}">${fmtDT(t.endDatetime)}${overdue?' ⚠️':''}</span></div>
-      ${t.completedAt?`<div class="info-row"><span class="label">Completed</span><span class="val" style="color:var(--green)">${fmtDT(t.completedAt)}</span></div>`:''}
-      ${t.cancelReason?`<div class="info-row"><span class="label">Cancel Reason</span><span class="val">${esc(t.cancelReason)}</span></div>`:''}
-    </div>
-    ${t.totalSteps>0?`<div class="panel-sec"><div class="panel-sec-title">Progress</div><div class="prog-wrap"><div class="prog-label"><span>${t.completedSteps||0}/${t.totalSteps} steps</span><span style="font-weight:700;color:${pct>=100?'var(--green)':pct>=50?'var(--primary)':'var(--amber)'}">${pct}%</span></div><div class="prog-bar" style="height:7px"><div class="prog-fill" style="width:${pct}%;background:${pct>=100?'var(--green)':pct>=50?'var(--primary)':'var(--amber)'}"></div></div></div></div>`:''}
-    ${t.note?`<div class="panel-sec"><div class="panel-sec-title">Manager Note</div><div style="background:var(--amber-g);border:1px solid rgba(245,158,11,.22);border-radius:var(--r2);padding:10px 12px;font-size:13px;line-height:1.6;color:var(--text2)">📝 ${esc(t.note)}</div></div>`:''}
-    ${hasGPS?`<div class="panel-sec"><div class="panel-sec-title">GPS Location</div><button class="btn btn-primary btn-sm w-full" onclick="openGPSMap('${t._id}')">🗺️ View Full Route Trace</button></div>`:''}
-  </div>`;
-
-  // Steps tab
-  html += `<div id="tp-tab-steps" class="tab-content"><div class="panel-sec"><div class="step-timeline">`;
-  (t.steps||[]).forEach((s, i) => {
-    const isDone = ['completed','skipped'].includes(s.status);
-    const isActive = ['in_progress','reached'].includes(s.status);
-    const dotCls = isDone ? 'done' : isActive ? 'active' : 'pending';
-    const scol = {'completed':'var(--green)','in_progress':'var(--primary)','reached':'var(--amber)','skipped':'var(--text3)','pending':'var(--text3)'}[s.status]||'var(--text3)';
-    const slbl = {'completed':'✓ Completed','in_progress':'● In Progress','reached':'📍 Reached','skipped':'Skipped','pending':'Pending'}[s.status]||'Pending';
-    const reqs = [];
-    if (s.validations?.requirePhoto)         reqs.push('📸 Photo');
-    if (s.validations?.requireSignature)     reqs.push('✍️ Signature');
-    if (s.validations?.requireLocationCheck) reqs.push('📍 Location');
-    html += `<div class="step-item">
-      <div style="position:relative"><div class="step-dot ${dotCls}">${isDone?'✓':i+1}</div>${i<(t.steps||[]).length-1?`<div class="step-line ${isDone?'done':''}"></div>`:''}</div>
-      <div class="step-content">
-        <div style="display:flex;align-items:center;gap:7px;margin-bottom:3px"><div class="step-title-text">${esc(s.title||'Step '+(i+1))}</div></div>
-        <div class="step-time">${fmtTime(s.startDatetime)} → ${fmtTime(s.endDatetime)}</div>
-        <div style="margin-top:4px"><span style="font-size:11.5px;font-weight:700;color:${scol}">${slbl}</span>${s.completedAt?`<span style="font-size:11px;color:var(--text3)"> · ${fmtDT(s.completedAt)}</span>`:''}</div>
-        ${reqs.length?`<div style="font-size:11px;color:var(--text3);margin-top:4px">Requires: ${reqs.join(' · ')}</div>`:''}
-        ${s.employeeNotes?`<div class="step-ev">💬 ${esc(s.employeeNotes)}</div>`:''}
-        <div class="step-media">
-          ${s.submittedPhotoUrl?`<img class="step-photo-thumb" src="${esc(s.submittedPhotoUrl)}" alt="Photo" onclick="openLightbox('${esc(s.submittedPhotoUrl)}','Step ${i+1} — Photo Proof')"/>`:'' }
-          ${s.signatureData?`<div class="step-sig-thumb" onclick="openSigViewer('${esc(s.signatureData)}','Signed — Step ${i+1}')" style="cursor:pointer;background:#fff;border-radius:6px;padding:4px;border:1px solid var(--border)"><img src="${s.signatureData.startsWith('data:')?s.signatureData:'data:image/png;base64,'+s.signatureData}" alt="Signature" style="max-width:100%;max-height:60px;object-fit:contain;display:block"/><div style="font-size:9px;color:var(--text3);text-align:center;margin-top:2px">✍️ Tap to expand</div></div>`:''}
-        </div>
-      </div>
-    </div>`;
-  });
-  if (!(t.steps||[]).length) html += '<div style="padding:20px;text-align:center;color:var(--text3);font-size:13px">No steps defined</div>';
-  html += `</div></div></div>`;
-
-  // GPS tab
-  html += `<div id="tp-tab-gps" class="tab-content"><div class="panel-sec"><button class="btn btn-primary w-full" onclick="openGPSMap('${t._id}')">🗺️ Open Full-Screen Route Map</button>${t.locationTrace?.length?`<div class="gps-trace-info" style="margin-top:10px"><div class="trace-stat"><strong>${t.locationTrace.length}</strong>GPS Pings</div>${t.distanceTravelledKm?`<div class="trace-stat"><strong>${t.distanceTravelledKm.toFixed(1)}km</strong>Distance</div>`:''}</div>`:''}</div></div>`;
-
-  $('tp-body').innerHTML = html;
-  showTaskTab('info', document.querySelector('#tp-tabs .tab-btn'));
-}
-
-function showTaskTab(tab, btn) {
-  document.querySelectorAll('#tp-tabs .tab-btn').forEach(b => b.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  ['info','steps','gps'].forEach(t => { const el = $('tp-tab-'+t); if(el) el.classList.toggle('active', t===tab); });
-}
-
-function closeTaskPanel() {
-  $('task-panel')?.classList.remove('open');
-  _currentTaskId = null;
-  if (typeof hideMobBackBar === 'function') hideMobBackBar();
-}
-
-async function cancelCurrentTask() {
-  if (!_currentTaskId) return;
-  if (!confirm('Cancel this task? This cannot be undone.')) return;
-  try {
-    const d = await api('PATCH', '/tasks/cancel', { taskId: _currentTaskId });
-    if (d.success) { toast('Task cancelled','success'); closeTaskPanel(); loadTasks(_tpg); loadTaskDashboard(); }
-    else toast(d.message||'Failed','error');
-  } catch(e) { toast('Error','error'); }
-}
-
-/* ══════════════════════════════════════════════════════════════
-   GPS MAP
-══════════════════════════════════════════════════════════════ */
-async function openGPSMap(taskId) {
-  openM('modal-gps');
-  $('map-container').innerHTML = '<div class="loading" style="height:100%;align-items:center;justify-content:center;display:flex"><div class="spinner"></div></div>';
-  $('gps-trace-stats').innerHTML = '';
-  try {
-    const d = await api('POST', '/tasks/location-trace', { taskId });
-    if (!d.success) { $('map-container').innerHTML = `<div class="empty-state"><div class="empty-icon">📍</div><h3>No GPS Data</h3><p>${esc(d.message||'No location trace available.')}</p></div>`; return; }
-    const trace = d.data?.locationTrace || d.data?.trace || [];
-    const task  = d.data?.task || {};
-    if ($('gps-modal-title')) $('gps-modal-title').textContent = esc(task.title||'GPS Route Trace');
-    if ($('gps-modal-sub'))   $('gps-modal-sub').textContent   = `${trace.length} location pings · ${esc(task.assignedTo?.fullName||'Employee')}`;
-    if (trace.length > 0) {
-      const km = d.data?.distanceTravelledKm;
-      if ($('gps-trace-stats')) $('gps-trace-stats').innerHTML = `<div class="trace-stat"><strong>${trace.length}</strong>Pings</div>${km?`<div class="trace-stat"><strong>${km.toFixed(1)}km</strong>Distance</div>`:''}<div class="trace-stat"><strong>${fmtTime(trace[0]?.timestamp)}</strong>Start</div><div class="trace-stat"><strong>${fmtTime(trace[trace.length-1]?.timestamp)}</strong>End</div>`;
-    }
-    initLeafletMap(trace, task);
-  } catch(e) { $('map-container').innerHTML = `<div class="empty-state"><div class="empty-icon">⚠️</div><h3>Error</h3><p>${esc(e.message)}</p></div>`; }
-}
-
-function initLeafletMap(trace, task) {
-  if (!window.L) {
-    const css = document.createElement('link'); css.rel = 'stylesheet'; css.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css'; document.head.appendChild(css);
-    const js  = document.createElement('script'); js.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
-    js.onload = () => renderLeafletMap(trace, task); document.head.appendChild(js);
-  } else renderLeafletMap(trace, task);
-}
-
-function renderLeafletMap(trace, task) {
-  $('map-container').innerHTML = '<div id="leaflet-map" style="width:100%;height:100%"></div>';
-  const center = trace.length > 0 ? [trace[0].coordinates[1], trace[0].coordinates[0]] : [20.5937, 78.9629];
-  if (_map) { _map.remove(); _map = null; }
-  _map = L.map('leaflet-map').setView(center, 14);
-  _mapTileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution:'© OpenStreetMap', maxZoom:19 }).addTo(_map);
-  if (!trace.length) { L.marker(center).addTo(_map).bindPopup('No GPS data recorded').openPopup(); return; }
-  const pts = trace.map(p => [p.coordinates[1], p.coordinates[0]]);
-  _mapPolyline = L.polyline(pts, { color:'#137fec', weight:3, opacity:.85 }).addTo(_map);
-  const mkIcon = (bg) => L.divIcon({ html:`<div style="width:16px;height:16px;border-radius:50%;background:${bg};border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.4)"></div>`, iconSize:[16,16], iconAnchor:[8,8] });
-  L.marker(pts[0], { icon: mkIcon('var(--green)') }).addTo(_map).bindPopup(`<b>Start</b><br>${fmtDT(trace[0].timestamp)}`);
-  L.marker(pts[pts.length-1], { icon: mkIcon('var(--red)') }).addTo(_map).bindPopup(`<b>${task.status==='completed'?'Completed':'Last Known'}</b><br>${fmtDT(trace[trace.length-1].timestamp)}`);
-  (task.steps||[]).forEach((s, i) => {
-    if (s.destinationLocation?.coordinates) {
-      const c  = [s.destinationLocation.coordinates[1], s.destinationLocation.coordinates[0]];
-      const ic = L.divIcon({ html:`<div style="width:22px;height:22px;border-radius:50%;background:var(--amber);border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#000;box-shadow:0 2px 6px rgba(0,0,0,.4)">${i+1}</div>`, iconSize:[22,22], iconAnchor:[11,11] });
-      L.marker(c, { icon: ic }).addTo(_map).bindPopup(`<b>Step ${i+1}: ${esc(s.title||'')}</b><br>${esc(s.destinationLocation.address||'')}`);
-    }
-  });
-  _map.fitBounds(_mapPolyline.getBounds(), { padding:[20,20] });
-}
-function mapFitBounds()      { if (_map && _mapPolyline) _map.fitBounds(_mapPolyline.getBounds(), { padding:[20,20] }); }
-function mapToggleSatellite(){ if (!_map||!window.L) return; _mapSatellite=!_mapSatellite; if(_mapTileLayer)_map.removeLayer(_mapTileLayer); _mapTileLayer=L.tileLayer(_mapSatellite?'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}':'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:_mapSatellite?'© Esri':'© OpenStreetMap',maxZoom:19}).addTo(_map); }
-function stopMap()           { if (_map) { _map.remove(); _map = null; } }
+/* Task detail panel, GPS / live map, create / edit / recreate → assets/js/tasks.js */
 
 /* ══════════════════════════════════════════════════════════════
    ATTENDANCE
@@ -867,7 +696,7 @@ async function loadAnalytics() {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   ORG EDIT / ROOMS CREATE / TASK WIZARD
+   ORG EDIT / ROOMS CREATE
 ══════════════════════════════════════════════════════════════ */
 function openEditOrg() {
   if (!_org) return; clearA('alert-edit');
@@ -903,100 +732,6 @@ async function submitCreateRoom(e) {
     else showA('alert-create-room','error',esc(d.message));
   } catch(err) { showA('alert-create-room','error','Network error'); }
   finally { btn.innerHTML='🏠 Create Room'; btn.disabled=false; }
-}
-
-/* Task wizard */
-function openCreateTaskForRoom() {
-  _ctRoom = _currentRoomId;
-  $('ct-room-sub').textContent = _ctRoom ? 'Assign a task to room members' : 'No room selected';
-  closeM('modal-room-detail');
-  resetWizard(); openM('modal-create-task');
-  const now = new Date(); now.setMinutes(now.getMinutes()-now.getTimezoneOffset());
-  const str = now.toISOString().slice(0,16);
-  $('ct-start').min = $('ct-end').min = str;
-  if (_ctRoom) loadCtMembers();
-}
-function resetWizard() {
-  _wzStep=1; _ctSteps=[]; _ctSelectedIds=new Set(); _ctMembers=[];
-  clearA('alert-create-task');
-  ['ct-title','ct-note','ct-start','ct-end'].forEach(id => { if($(id)) $(id).value=''; });
-  $('ct-priority').value='medium'; $('ct-track').checked=false;
-  $('ct-steps-list').innerHTML=''; $('ct-steps-empty').style.display='';
-  $('ct-members-list').innerHTML='<div class="loading"><div class="spinner"></div></div>';
-  updateWizardUI();
-}
-function updateWizardUI() {
-  for (let i=1;i<=3;i++) {
-    const dot=$('wz-dot-'+i), lbl=$('wz-lbl-'+i), page=$('wz-page-'+i);
-    if(i<_wzStep){dot.className='wz-dot done';dot.textContent='✓';lbl.className='wz-label';}
-    else if(i===_wzStep){dot.className='wz-dot active';dot.textContent=i;lbl.className='wz-label active';}
-    else{dot.className='wz-dot';dot.textContent=i;lbl.className='wz-label';}
-    page?.classList.toggle('active',i===_wzStep);
-  }
-}
-function wzNext(from) {
-  clearA('alert-create-task');
-  if (from===1) {
-    const title=$('ct-title').value.trim(),start=$('ct-start').value,end=$('ct-end').value;
-    let ok=true;
-    ['fg-ct-title','fg-ct-start','fg-ct-end'].forEach(id=>$(id)?.classList.remove('field-error'));
-    if(!title){$('fg-ct-title')?.classList.add('field-error');ok=false;}
-    if(!start){$('fg-ct-start')?.classList.add('field-error');ok=false;}
-    if(!end)  {$('fg-ct-end')?.classList.add('field-error');ok=false;}
-    if(ok&&new Date(end)<=new Date(start)){showA('alert-create-task','error','End time must be after start time');ok=false;}
-    if(!ok)return;_wzStep=2;
-  } else if(from===2){
-    if(!_ctRoom){showA('alert-create-task','error','No room selected');return;}
-    if(!_ctSteps.length){showA('alert-create-task','error','Add at least one step');return;}
-    _wzStep=3;renderCtMembers();
-  }
-  updateWizardUI();
-}
-function wzBack(from){_wzStep=from-1;updateWizardUI();clearA('alert-create-task');}
-function addTaskStep(){
-  const id='s'+Date.now();
-  _ctSteps.push({id,title:'',startDatetime:$('ct-start').value||'',endDatetime:$('ct-end').value||'',requirePhoto:false,requireSignature:false,requireLocationCheck:false});
-  renderCtSteps();
-}
-function deleteCtStep(id){_ctSteps=_ctSteps.filter(s=>s.id!==id);renderCtSteps();}
-function updateCtStep(id,field,val){const s=_ctSteps.find(s=>s.id===id);if(s)s[field]=val;}
-function renderCtSteps(){
-  const el=$('ct-steps-list');$('ct-steps-empty').style.display=_ctSteps.length?'none':'';
-  if(!_ctSteps.length){el.innerHTML='';return;}
-  el.innerHTML=_ctSteps.map((s,i)=>`<div class="step-form-item"><div class="step-form-hdr"><div style="display:flex;align-items:center;gap:8px"><div class="step-form-num">${i+1}</div><div style="font-size:13px;font-weight:600">Step ${i+1}</div></div><button class="btn btn-danger btn-sm" onclick="deleteCtStep('${s.id}')">✕</button></div><div class="fg" style="margin-bottom:10px"><label>Step Title *</label><input type="text" value="${esc(s.title)}" placeholder="e.g. Collect signature" oninput="updateCtStep('${s.id}','title',this.value)" style="font-size:13px;padding:8px 11px"/></div><div class="form-row"><div class="fg"><label>Start *</label><input type="datetime-local" value="${esc(s.startDatetime)}" oninput="updateCtStep('${s.id}','startDatetime',this.value)" style="font-size:13px;padding:8px 11px"/></div><div class="fg"><label>End *</label><input type="datetime-local" value="${esc(s.endDatetime)}" oninput="updateCtStep('${s.id}','endDatetime',this.value)" style="font-size:13px;padding:8px 11px"/></div></div><div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px"><label style="text-transform:none;font-size:12.5px;display:flex;align-items:center;gap:5px;cursor:pointer;font-weight:500"><input type="checkbox" ${s.requirePhoto?'checked':''} onchange="updateCtStep('${s.id}','requirePhoto',this.checked)"/> 📸 Photo</label><label style="text-transform:none;font-size:12.5px;display:flex;align-items:center;gap:5px;cursor:pointer;font-weight:500"><input type="checkbox" ${s.requireSignature?'checked':''} onchange="updateCtStep('${s.id}','requireSignature',this.checked)"/> ✍️ Signature</label><label style="text-transform:none;font-size:12.5px;display:flex;align-items:center;gap:5px;cursor:pointer;font-weight:500"><input type="checkbox" ${s.requireLocationCheck?'checked':''} onchange="updateCtStep('${s.id}','requireLocationCheck',this.checked)"/> 📍 Location</label></div></div>`).join('');
-}
-async function loadCtMembers(){
-  if(!_ctRoom)return;
-  try{const d=await api('GET','/rooms/member/'+_ctRoom);_ctMembers=(d.data?.members||[]).filter(m=>m.user&&m.status!=='removed');}catch(e){_ctMembers=[];}
-}
-function renderCtMembers(){
-  const el=$('ct-members-list');
-  if(!_ctMembers.length){el.innerHTML='<div style="padding:16px;text-align:center;color:var(--text3);font-size:13px">No members. Add employees first.</div>';updateCtCount();return;}
-  el.innerHTML=_ctMembers.map(m=>{const u=m.user||m,id=u._id||u.id,sel=_ctSelectedIds.has(id);return`<div class="member-select-item ${sel?'selected':''}" onclick="ctToggle('${id}',this)">${avatarHTML(u,{size:32})}<div style="flex:1;min-width:0"><div style="font-size:12.5px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(u.fullName||u.username||'—')}</div><div style="font-size:11px;color:var(--text3)">@${esc(u.username||'—')}</div></div><div style="font-size:11px;color:${u.isOnline?'var(--green)':'var(--text3)'}">● ${u.isOnline?'Online':'Offline'}</div><div class="check">${sel?'✓':''}</div></div>`;}).join('');
-  $('ct-member-count').textContent=_ctMembers.length+' member'+(_ctMembers.length!==1?'s':'');
-  updateCtCount();
-}
-function ctToggle(id,el){if(_ctSelectedIds.has(id)){_ctSelectedIds.delete(id);el.classList.remove('selected');el.querySelector('.check').textContent='';}else{_ctSelectedIds.add(id);el.classList.add('selected');el.querySelector('.check').textContent='✓';}updateCtCount();}
-function ctSelectAll(){_ctMembers.forEach(m=>{const id=(m.user||m)._id||(m.user||m).id;if(id)_ctSelectedIds.add(id);});renderCtMembers();}
-function ctClearAll(){_ctSelectedIds.clear();renderCtMembers();}
-function updateCtCount(){const n=_ctSelectedIds.size;$('ct-selected-info').textContent=n?`${n} selected`:'None selected';}
-async function submitCreateTask(){
-  clearA('alert-create-task');
-  if(!_ctSelectedIds.size){showA('alert-create-task','error','Select at least one employee');return;}
-  if(!_ctRoom){showA('alert-create-task','error','No room selected');return;}
-  for(let i=0;i<_ctSteps.length;i++){
-    const s=_ctSteps[i];
-    if(!s.title.trim()){showA('alert-create-task','error',`Step ${i+1}: Title is required`);return;}
-    if(!s.startDatetime||!s.endDatetime){showA('alert-create-task','error',`Step ${i+1}: Times are required`);return;}
-    if(new Date(s.endDatetime)<=new Date(s.startDatetime)){showA('alert-create-task','error',`Step ${i+1}: End must be after start`);return;}
-  }
-  const btn=$('btn-create-task');btn.innerHTML='<span class="spinner spinner-xs" style="display:inline-block;border-top-color:#fff;margin:0 5px -2px 0"></span> Creating…';btn.disabled=true;
-  try{
-    const d=await api('POST','/tasks',{roomId:_ctRoom,title:$('ct-title').value.trim(),note:$('ct-note').value.trim()||undefined,priority:$('ct-priority').value,startDatetime:new Date($('ct-start').value).toISOString(),endDatetime:new Date($('ct-end').value).toISOString(),isFieldWork:$('ct-track').checked,assignedTo:Array.from(_ctSelectedIds),steps:_ctSteps.map(s=>({title:s.title,startDatetime:new Date(s.startDatetime).toISOString(),endDatetime:new Date(s.endDatetime).toISOString(),validations:{requirePhoto:s.requirePhoto,requireSignature:s.requireSignature,signatureFrom:s.requireSignature?'customer':null,requireLocationCheck:s.requireLocationCheck,requireLocationTrace:$('ct-track').checked}}))});
-    if(d.success){toast(`Task created for ${_ctSelectedIds.size} employee${_ctSelectedIds.size>1?'s':''}!`,'success');closeM('modal-create-task');loadTasks(1);loadTaskDashboard();}
-    else showA('alert-create-task','error',esc(d.message||'Failed'));
-  }catch(e){showA('alert-create-task','error','Network error');}
-  finally{btn.innerHTML='🚀 Create Task';btn.disabled=false;}
 }
 
 /* ── Export ──────────────────────────────────────────────────── */
