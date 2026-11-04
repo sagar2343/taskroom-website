@@ -206,6 +206,7 @@
   <link rel="stylesheet" href="assets/css/dashboard.css">
   <link rel="stylesheet" href="assets/css/patch.css">
   <link rel="stylesheet" href="assets/css/tasks.css">
+  <link rel="stylesheet" href="assets/css/phone.css">
 
 </head>
 
@@ -562,33 +563,49 @@
           </ul>
         </div>
 
-        <!-- Phone mockup -->
-        <div class="l-app-phone-wrap" aria-hidden="true">
-          <div class="l-app-phone">
-            <div class="l-app-phone-notch"></div>
-            <div class="l-app-phone-screen">
-              <div class="l-app-screen-hdr">
-                <div style="font-size:11px;font-weight:700;color:var(--text)">TaskRoom</div>
-                <div style="display:flex;gap:5px;align-items:center"><div style="width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green)"></div><div style="font-size:9px;color:var(--green)">Live</div></div>
-              </div>
-              <div class="l-app-task-card">
-                <div style="font-size:10px;font-weight:700;margin-bottom:4px;color:var(--text)">Client Visit — Andheri</div>
-                <div style="font-size:9px;color:var(--text2);margin-bottom:6px">Step 2 of 4 · Due 3:00 PM</div>
-                <div style="height:3px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden"><div style="width:50%;height:100%;background:var(--primary);border-radius:2px"></div></div>
-              </div>
-              <div class="l-app-steps">
-                <div class="l-app-step done">✓ Reached Location</div>
-                <div class="l-app-step active">▶ Upload Photo Proof</div>
-                <div class="l-app-step pend">○ Collect Signature</div>
-                <div class="l-app-step pend">○ Mark Complete</div>
-              </div>
-              <div class="l-app-actions">
-                <div class="l-app-action-btn">📷 Upload Photo</div>
-                <div class="l-app-action-btn">✍️ Get Signature</div>
+        <!-- Phone mockup — screenshots: assets/app-screen-1.png … app-screen-4.png (slideshow: assets/js/phone-slider.js) -->
+        <div class="l-app-phone-wrap">
+          <figure class="tr-phone" role="img" aria-label="TaskRoom mobile app screenshot">
+            <span class="tr-btn tr-btn-action"></span><span class="tr-btn tr-btn-vol-up"></span><span class="tr-btn tr-btn-vol-dn"></span><span class="tr-btn tr-btn-power"></span>
+            <div class="tr-phone-frame">
+              <div class="tr-phone-bezel">
+                <div class="tr-phone-screen">
+                  <div class="tr-slides" data-interval="3200" data-v="1">
+                    <img class="tr-slide" data-base="assets/app-screen-1,assets/app-screenshot" alt="TaskRoom app — Today's task with steps" width="1080" height="2340" decoding="async" draggable="false">
+                    <img class="tr-slide" data-base="assets/app-screen-2" alt="TaskRoom app — Arriving at the destination with GPS check" width="1080" height="2340" decoding="async" draggable="false">
+                    <img class="tr-slide" data-base="assets/app-screen-3" alt="TaskRoom app — Photo and signature proof" width="1080" height="2340" decoding="async" draggable="false">
+                    <img class="tr-slide" data-base="assets/app-screen-4" alt="TaskRoom app — Manager live location map" width="1080" height="2340" decoding="async" draggable="false">
+                    <img class="tr-slide" data-base="assets/app-screen-5" alt="TaskRoom app — Completed task with all proofs" width="1080" height="2340" decoding="async" draggable="false">
+                    <img class="tr-slide" data-base="assets/app-screen-6" alt="TaskRoom app — Attendance punch-in" width="1080" height="2340" decoding="async" draggable="false">
+                  </div>
+                  <!-- built-in preview, shown only until the screenshot file exists -->
+                  <div class="tr-phone-fallback" aria-hidden="true">
+                    <div class="l-app-screen-hdr">
+                      <div style="font-size:11px;font-weight:700;color:var(--text)">TaskRoom</div>
+                      <div style="display:flex;gap:5px;align-items:center"><div style="width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 4px var(--green)"></div><div style="font-size:9px;color:var(--green)">Live</div></div>
+                    </div>
+                    <div class="l-app-task-card">
+                      <div style="font-size:10px;font-weight:700;margin-bottom:4px;color:var(--text)">Client Visit — Andheri</div>
+                      <div style="font-size:9px;color:var(--text2);margin-bottom:6px">Step 2 of 4 · Due 3:00 PM</div>
+                      <div style="height:3px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden"><div style="width:50%;height:100%;background:var(--primary);border-radius:2px"></div></div>
+                    </div>
+                    <div class="l-app-steps">
+                      <div class="l-app-step done">✓ Reached Location</div>
+                      <div class="l-app-step active">▶ Upload Photo Proof</div>
+                      <div class="l-app-step pend">○ Collect Signature</div>
+                      <div class="l-app-step pend">○ Mark Complete</div>
+                    </div>
+                    <div class="l-app-actions">
+                      <div class="l-app-action-btn">📷 Upload Photo</div>
+                      <div class="l-app-action-btn">✍️ Get Signature</div>
+                    </div>
+                  </div>
+                  <span class="tr-phone-cam"></span>
+                  <span class="tr-phone-glare"></span>
+                </div>
               </div>
             </div>
-            <div class="l-app-phone-btn"></div>
-          </div>
+          </figure>
         </div>
 
         <!-- Employee card -->
@@ -1414,6 +1431,7 @@
 <script src="assets/js/auth.js"></script>
 <script src="assets/js/dashboard.js"></script>
 <script src="assets/js/tasks.js"></script>
+<script src="assets/js/phone-slider.js" defer></script>
 
 <script>
 /* ── App Init ────────────────────────────────────────────────── */

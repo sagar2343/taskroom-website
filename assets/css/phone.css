@@ -1,0 +1,136 @@
+/* ═══════════════════════════════════════════════════════════════
+   TASKROOM — REALISTIC PHONE FRAME (landing page, "Mobile App" section)
+
+   Put your screenshots at:  assets/app-screen-1.png, app-screen-2.png, app-screen-3.png …
+   (.jpg / .jpeg / .webp also work). They play as a slideshow — see assets/js/phone-slider.js
+
+   • Each screenshot fills the screen edge-to-edge (object-fit: cover,
+     anchored to the top), so it can never stretch or leave gaps.
+   • Use a FULL-SCREEN phone screenshot (not cropped). Most modern phones
+     are 9:19.5 – 9:20. If yours differs, change --tr-ratio below.
+   • Until the file exists, a built-in mock screen is shown instead.
+═══════════════════════════════════════════════════════════════ */
+
+.l-app-split { align-items: center; }                 /* centre the taller phone between the two cards */
+
+.l-app-phone-wrap { position: relative; padding: 14px 18px 30px; }
+.l-app-phone-wrap::after {                            /* soft ground shadow under the phone */
+  content: ''; position: absolute; left: 50%; bottom: 6px; width: 70%; height: 22px; transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(0,0,0,.55), transparent 70%); filter: blur(6px); pointer-events: none;
+}
+
+.tr-phone {
+  --tr-w: clamp(212px, 19vw, 252px);
+  --tr-ratio: 9 / 19.5;                               /* ← your screenshot's width / height */
+  --tr-metal: 3px;                                    /* thickness of the metal rim */
+  --tr-bezel: 8px;                                    /* thickness of the black glass bezel */
+  position: relative; width: var(--tr-w); margin: 0; flex-shrink: 0;
+}
+
+/* metal rim (titanium / graphite) */
+.tr-phone-frame {
+  position: relative; padding: var(--tr-metal); border-radius: 44px;
+  background:
+    linear-gradient(135deg, #9096a0 0%, #474b53 16%, #1a1c20 45%, #2b2e34 70%, #8a8f98 100%);
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,.7),                         /* outer hairline */
+    inset 0 0 0 1px rgba(255,255,255,.22),            /* polished edge highlight */
+    inset 0 1px 2px rgba(255,255,255,.45),
+    0 46px 90px rgba(0,0,0,.55),
+    0 14px 30px rgba(0,0,0,.4),
+    0 0 90px rgba(19,127,236,.14);                    /* faint brand glow */
+}
+
+/* black glass bezel around the display */
+.tr-phone-bezel {
+  padding: var(--tr-bezel); border-radius: calc(44px - var(--tr-metal)); background: #040405;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.07), inset 0 0 8px rgba(0,0,0,.95);
+}
+
+/* the display */
+.tr-phone-screen {
+  position: relative; overflow: hidden; isolation: isolate; background: #000;
+  aspect-ratio: var(--tr-ratio);
+  border-radius: calc(44px - var(--tr-metal) - var(--tr-bezel) + 2px);
+}
+/* slideshow: slides are stacked; the incoming one fades + eases in over the outgoing one */
+.tr-slides { position: absolute; inset: 0; }
+.tr-slide {
+  position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+  object-fit: cover; object-position: top center;     /* fills the screen exactly, never distorts */
+  opacity: 0; transform: scale(1.045); z-index: 0; will-change: opacity, transform;
+  transition: opacity .8s ease, transform 1.1s cubic-bezier(.2,.7,.2,1);
+  user-select: none; -webkit-user-drag: none;
+}
+.tr-slide.on      { opacity: 1; transform: scale(1); z-index: 2; }
+.tr-slide.prev    { opacity: 1; transform: scale(1); z-index: 1; transition: none; }  /* stays opaque underneath → no flash of black */
+.tr-slide.instant { transition: none; }
+.tr-phone-screen.has-shot .tr-phone-fallback { display: none; }
+
+/* shown only until the screenshot file is found */
+.tr-phone-fallback {
+  position: absolute; inset: 0; display: flex; flex-direction: column; gap: 8px;
+  padding: 38px 13px 14px; background: var(--bg);
+}
+
+/* front camera: punch-hole (Android). Add class "tr-island" to .tr-phone for a pill-shaped island instead */
+.tr-phone-cam {
+  position: absolute; z-index: 4; top: 3.2%; left: 50%; width: 11px; height: 11px; transform: translateX(-50%);
+  border-radius: 50%; background: radial-gradient(circle at 35% 35%, #26304a 0%, #07080c 55%, #000 100%);
+  box-shadow: 0 0 0 2px #000, inset 0 0 2px rgba(120,150,255,.35);
+}
+.tr-phone.tr-island .tr-phone-cam { width: 31%; height: 22px; border-radius: 99px; background: #000; box-shadow: none; top: 2.4%; }
+.tr-phone.tr-island .tr-phone-cam::after {
+  content: ''; position: absolute; right: 18%; top: 50%; width: 8px; height: 8px; transform: translateY(-50%); border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #26304a, #05060a 70%); box-shadow: inset 0 0 2px rgba(120,150,255,.4);
+}
+
+/* glass reflection */
+.tr-phone-glare {
+  position: absolute; inset: 0; z-index: 5; pointer-events: none; border-radius: inherit;
+  background:
+    linear-gradient(115deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,.05) 20%, rgba(255,255,255,0) 38%),
+    radial-gradient(120% 55% at 100% 0%, rgba(255,255,255,.07), rgba(255,255,255,0) 60%);
+}
+
+/* side buttons */
+.tr-btn { position: absolute; width: 4px; border-radius: 2px; z-index: 0;
+  background: linear-gradient(90deg, #1b1d21, #7a7f88 45%, #25282d); box-shadow: 0 0 0 1px rgba(0,0,0,.5); }
+.tr-btn-action { left: -3px;  top: 17%; height: 5%; }
+.tr-btn-vol-up { left: -3px;  top: 25%; height: 8.5%; }
+.tr-btn-vol-dn { left: -3px;  top: 35.5%; height: 8.5%; }
+.tr-btn-power  { right: -3px; top: 28%; height: 12%;
+  background: linear-gradient(270deg, #1b1d21, #7a7f88 45%, #25282d); }
+.tr-phone-frame { z-index: 1; }
+
+/* progress dots under the phone (also clickable) */
+.tr-dots { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 26px; position: relative; z-index: 1; }
+.tr-dot { appearance: none; border: 0; padding: 0; width: 8px; height: 8px; border-radius: 99px; cursor: pointer; position: relative; overflow: hidden;
+  background: rgba(148,163,184,.35); transition: width .35s ease, background .3s ease; }
+.tr-dot:hover { background: rgba(148,163,184,.6); }
+.tr-dot:focus-visible { outline: 2px solid var(--primary-light, #4da6ff); outline-offset: 3px; }
+.tr-dot i { position: absolute; inset: 0; width: 0; border-radius: inherit; background: var(--primary-light, #4da6ff); }
+.tr-dot.on { width: 26px; }
+.tr-dot.on i { animation: trDotFill var(--tr-int, 3200ms) linear forwards; }   /* fills while the slide is on screen */
+.tr-dots.paused .tr-dot.on i { animation-play-state: paused; }                  /* frozen while hovering */
+@keyframes trDotFill { from { width: 0; } to { width: 100%; } }
+@media (prefers-reduced-motion: reduce) {
+  .tr-slide { transition: none; transform: none; }
+  .tr-dot.on i { animation: none; width: 100%; }
+}
+
+/* gentle idle float (respects reduced-motion) */
+@media (prefers-reduced-motion: no-preference) {
+  .tr-phone { animation: trPhoneFloat 7s ease-in-out infinite; }
+  @keyframes trPhoneFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+}
+
+/* light theme: the phone stays dark metal, only the shadows soften */
+[data-theme="light"] .tr-phone-frame {
+  box-shadow: 0 0 0 1px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.28), inset 0 1px 2px rgba(255,255,255,.5),
+              0 34px 60px rgba(15,23,42,.28), 0 10px 22px rgba(15,23,42,.2), 0 0 70px rgba(19,127,236,.1);
+}
+[data-theme="light"] .l-app-phone-wrap::after { background: radial-gradient(ellipse at center, rgba(15,23,42,.35), transparent 70%); }
+[data-theme="light"] .tr-phone-fallback { background: #f1f4f8; }
+
+@media (max-width: 1180px) { .tr-phone { --tr-w: 212px; --tr-bezel: 7px; } }
