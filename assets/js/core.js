@@ -200,3 +200,4 @@ function logout() {
 const PLAN_RANK = { starter: 0, growth: 1, business: 2, enterprise: 3 };
 function planRank(slug) { return PLAN_RANK[slug] ?? -1; }
 function fmtLimit(v)    { return v === -1 || v === 99999 ? '∞' : v; }
+  
