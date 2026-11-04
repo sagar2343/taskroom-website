@@ -1,19 +1,13 @@
 /**
  * GET /api/config
- *
- * Hands the browser the Google Maps key from an environment variable, so the
- * key lives in your hosting settings (Vercel → Project → Settings →
- * Environment Variables) and not in the source code.
- *
- *   GOOGLE_MAPS_API_KEY = <your key>
- *
- * A Maps JavaScript key is always visible to the browser once the map loads,
- * so protect it in Google Cloud Console instead:
- *   • Application restrictions → HTTP referrers → https://taskroom.in/*  (and your www / preview domains)
- *   • API restrictions → Maps JavaScript API, Places API (New), Geocoding API
+ * Returns the Google Maps key from an environment variable, so the key
+ * is not stored in the source code.
+ * Accepted variable names (first one found is used):
+ *   GOOGLE_MAPS_API_KEY, GOOGLE_PLACES_API_KEY
  */
 module.exports = (req, res) => {
+  const key = process.env.GOOGLE_MAPS_API_KEY || process.env.GOOGLE_PLACES_API_KEY || '';
   res.setHeader('Cache-Control', 'no-store');
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
-  res.status(200).json({ googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY || '' });
+  res.status(200).json({ googleMapsApiKey: key });
 };
